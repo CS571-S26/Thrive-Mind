@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Form, Button, Container } from "react-bootstrap";
 
 function MoodChecker() {
   const [mood, setMood] = useState("");
@@ -15,20 +16,22 @@ function MoodChecker() {
   };
 
   return (
-    <div>
-      <h2>Mood Checker</h2>
+    <Container>
+      <h2 className="mt-3">Mood Checker</h2>
 
-      <select onChange={(e) => setMood(e.target.value)}>
+      <Form.Select onChange={(e) => setMood(e.target.value)}>
         <option value="">Select your mood</option>
         <option value="sad">Sad</option>
         <option value="anxious">Anxious</option>
         <option value="happy">Happy</option>
-      </select>
+      </Form.Select>
 
-      <button onClick={handleSubmit}>Check</button>
+      <Button className="mt-3" onClick={handleSubmit}>
+        Check
+      </Button>
 
-      {result && <p>{result}</p>}
-    </div>
+      {result && <p className="mt-3">{result}</p>}
+    </Container>
   );
 }
 

@@ -1,14 +1,20 @@
+import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function Navbar() {
+function CustomNavbar() {
   return (
-    <nav style={{ padding: "10px", background: "#f5f5f5" }}>
-      <Link to="/">Home</Link> |{" "}
-      <Link to="/issues">Issues</Link> |{" "}
-      <Link to="/mood">Mood Checker</Link> |{" "}
-      <Link to="/talk">Let's Talk</Link>
-    </nav>
+    <Navbar bg="light" expand="lg">
+      <Container>
+        <Navbar.Brand>Thrive Mind</Navbar.Brand>
+        <Nav className="me-auto">
+          <Nav.Link as={Link} to="/">Home</Nav.Link>
+          <Nav.Link as={Link} to="/issues">Issues</Nav.Link>
+          <Nav.Link as={Link} to="/mood">Mood Checker</Nav.Link>
+          <Nav.Link as={Link} to="/talk">Let's Talk</Nav.Link>
+        </Nav>
+      </Container>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default CustomNavbar;
