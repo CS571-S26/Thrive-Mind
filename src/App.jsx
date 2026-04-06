@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Home from "./Home";
 import MoodChecker from "./components/MoodChecker";
 import Issues from "./components/Issues";
-import LetsTalk from "./components/Resources";
+import Resources from "./components/Resources";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/mood" element={<MoodChecker />} />
         <Route path="/issues" element={<Issues />} />
-        <Route path="/resources" element={<LetsTalk />} />
+        <Route path="/resources" element={<Resources />} />
       </Routes>
     </>
   );
