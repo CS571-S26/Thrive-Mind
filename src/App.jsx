@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Home from "./Home";
 import MoodChecker from "./components/MoodChecker";
 import Issues from "./components/Issues";
-import LetsTalk from "./components/LetsTalk";
+import LetsTalk from "./components/Resources";
 
 function App() {
   return (
