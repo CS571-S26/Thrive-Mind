@@ -4,36 +4,34 @@
   --primary-blue: #A7C7E7;
   --primary-purple: #CDB4DB;
   --accent: #7B61FF;
-
   --text-main: #4A4A4A;
   --text-light: #6b7280;
-
-  --shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  --shadow: 0 8px 24px rgba(123, 97, 255, 0.08);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
-/* 🌈 Background */
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
-  background: linear-gradient(135deg, #F8FAFF, #EEF3FF);
+  background: linear-gradient(135deg, #F8FAFF 0%, #EEF3FF 100%);
   color: var(--text-main);
+  min-height: 100vh;
 }
 
-/* Layout */
 #root {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 16px 20px 40px;
 }
 
-/* ✨ Headings */
 h1 {
-  font-size: 42px;
-  text-align: center;
+  font-size: 2.4rem;
   background: linear-gradient(90deg, #7B61FF, #A7C7E7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
 }
 
 h2 {
@@ -41,44 +39,45 @@ h2 {
   margin-bottom: 10px;
 }
 
-/* 💎 Card */
 .card-style {
   background: var(--card-bg);
-  border-radius: 16px;
-  padding: 20px;
-  margin: 20px 0;
+  border-radius: 18px;
+  padding: 28px;
+  margin: 0 0 20px;
   box-shadow: var(--shadow);
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-style:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(123, 97, 255, 0.12);
 }
 
-/* 🎯 Buttons */
 .btn-custom {
-  background: linear-gradient(135deg, #CDB4DB, #A7C7E7);
-  border: none;
-  color: #333;
-  padding: 8px 18px;
-  border-radius: 10px;
-  font-weight: 500;
-  transition: 0.2s;
+  background: linear-gradient(135deg, #CDB4DB, #A7C7E7) !important;
+  border: none !important;
+  color: #333 !important;
+  padding: 8px 22px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
 }
 
 .btn-custom:hover {
-  transform: scale(1.05);
+  transform: scale(1.04) !important;
+  box-shadow: 0 4px 14px rgba(123,97,255,0.25) !important;
 }
 
-/* 🧊 Form */
-select {
-  border-radius: 10px !important;
-  border: 1px solid #ddd !important;
-  padding: 8px;
+a { color: var(--accent); }
+
+.progress-bar {
+  background: linear-gradient(90deg, #CDB4DB, #7B61FF) !important;
 }
 
-/* 🌐 Links */
-a {
-  text-decoration: none;
-  color: var(--accent);
+@media (max-width: 768px) {
+  #root { padding: 10px 14px 30px; }
+  .card-style { padding: 18px; }
+  h1 { font-size: 1.8rem; }
 }
