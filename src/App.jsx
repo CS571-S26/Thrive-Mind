@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import Navbar from "./Components/Navbar";
 import Home from "./Home";
-import MoodChecker from "./components/MoodChecker";
-import Issues from "./components/Issues";
-import Resources from "./components/Resources";
+import MoodChecker from "./Components/MoodChecker";
+import Issues from "./Components/Issues";
+import Resources from "./Components/Resources";
 import SelfCarePlanner from "./Components/SelfCarePlanner"; // new self-care planner page
 
 
