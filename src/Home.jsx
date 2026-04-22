@@ -6,7 +6,6 @@ function Home() {
     { emoji: "🧠", title: "Mental Health Issues", desc: "Explore common challenges like stress, anxiety, and burnout with guided support.", path: "/issues", color: "#7B61FF" },
     { emoji: "📚", title: "Resources", desc: "Find therapists, hotlines, apps, and professional help whenever you need it.", path: "/resources", color: "#C084FC" },
     { emoji: "💗", title: "Self-Care Planner", desc: "You do not need a perfect day. Just a few small acts of care can make a difference.", path: "/planner", color: "#f66ceb" },
-    { emoji: "💗", title: "Self-Care Planner", desc: "You do not need a perfect day. Just a few small acts of care can make a difference.", path: "/planner", color: "#f66ceb" },
   ];
 
   return (
