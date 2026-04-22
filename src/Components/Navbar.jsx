@@ -26,6 +26,8 @@ function CustomNavbar() {
               { label: "Mental Health Issues", path: "/issues" },
               { label: "Mood Quiz", path: "/mood" },
               { label: "Resources", path: "/resources" },
+              { label: "Self-care planner", path: "/planner" },
+
             ].map(({ label, path }) => (
               <Nav.Link
                 key={path}
