@@ -3,13 +3,19 @@ import { Badge, Button, Card, Col, Container, Form, ProgressBar, Row } from "rea
 const STORAGE_KEY = "thrive_mind_self_care_planner"; 
 
 const DEFAULT_TASKS = [
-  { id: "water", label: "Drank water", emoji: "💧" }, 
+  { id: "water", label: "Drank water", emoji: "💧" },
   { id: "break", label: "Took a break", emoji: "🌸" },
-  { id: "meal", label: "Ate a meal", emoji: "🍽️" }, 
-  { id: "outside", label: "Went outside", emoji: "🌤️" }, 
-  { id: "rest", label: "Got rest", emoji: "🛌" }, 
-  {id: "note", label: "List down things you are grateful for", emoji: "😇"}
-]; 
+  { id: "meal", label: "Ate a meal", emoji: "🍽️" },
+  { id: "outside", label: "Went outside", emoji: "🌤️" },
+  { id: "rest", label: "Got rest", emoji: "🛌" },
+  { id: "note", label: "Listed things you are grateful for", emoji: "😇" },
+  { id: "stretch", label: "Did a gentle stretch", emoji: "🧘" },
+  { id: "music", label: "Listened to something calming", emoji: "🎵" },
+  { id: "friend", label: "Checked in with someone you trust", emoji: "💬" },
+  { id: "screen", label: "Took a short screen break", emoji: "📵" },
+  { id: "breathe", label: "Paused for deep breathing", emoji: "🌬️" },
+  { id: "kindness", label: "Spoke kindly to yourself", emoji: "💖" },
+];
 
 function SelfCarePlanner() {
   const [checkedItems, setCheckedItems] = useState(() => {
@@ -42,12 +48,12 @@ function SelfCarePlanner() {
   }, [completedCount]);
 
   const progressMessage = useMemo(() => {
-    if (progressPercent === 100) {
+    if (progressPercent >= 80) {
       return "You showed up for yourself in so many small ways today. So proud of you!!!"; // message for full completion
     }
 
-    if (progressPercent >= 60) {
-      return "You are making meaningful progress. Small caring actions really do count."; //strong progress
+    if (progressPercent >= 45) {
+      return "You are making meaningful progress. Small caring actions really do count."; //s. trong progress
     }
 
     if (progressPercent >= 20) {
