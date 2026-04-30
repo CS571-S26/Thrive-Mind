@@ -174,7 +174,7 @@ function AboutUs() {
                 </div>
 
                 <a
-                  href="mailto:ishatpfyiw@gmail.com"
+                  href="mailto:ishafyiw@gmail.com"
                   style={{
                     textDecoration: "none",
                     color: "#4A4A4A",
@@ -182,7 +182,7 @@ function AboutUs() {
                     wordBreak: "break-word"
                   }}
                 >
-                  ishatpfyiw@gmail.com
+                  ishafyiw@gmail.com
                 </a>
               </div>
 
