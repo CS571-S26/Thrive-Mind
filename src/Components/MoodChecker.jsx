@@ -8,7 +8,7 @@ const questions = [
       { label: "😴 Very low, barely able to do things", score: 1 },
       { label: "😞 Lower than usual", score: 2 },
       { label: "😐 About normal", score: 3 },
-      { label: "😊 Good, feeling energized", score: 4 },
+      { label: "😊 Good, feeling energized", score: 4 }
     ]
   },
   {
@@ -17,7 +17,7 @@ const questions = [
       { label: "😢 Very isolated and alone", score: 1 },
       { label: "😔 A bit disconnected", score: 2 },
       { label: "🙂 Okay — some connection", score: 3 },
-      { label: "💛 Loved and supported", score: 4 },
+      { label: "💛 Loved and supported", score: 4 }
     ]
   },
   {
@@ -26,7 +26,7 @@ const questions = [
       { label: "😩 Very poorly — barely sleeping", score: 1 },
       { label: "😟 Not great, restless nights", score: 2 },
       { label: "😌 Decent enough", score: 3 },
-      { label: "😴 Really well, feeling rested", score: 4 },
+      { label: "😴 Really well, feeling rested", score: 4 }
     ]
   },
   {
@@ -35,7 +35,7 @@ const questions = [
       { label: "😞 Very down or hopeless", score: 1 },
       { label: "😕 Struggling a bit", score: 2 },
       { label: "😶 Neutral — just getting by", score: 3 },
-      { label: "😄 Positive and hopeful", score: 4 },
+      { label: "😄 Positive and hopeful", score: 4 }
     ]
   },
   {
@@ -44,7 +44,7 @@ const questions = [
       { label: "😰 Feeling overwhelmed", score: 1 },
       { label: "😟 It's hard to cope", score: 2 },
       { label: "😐 Managing okay", score: 3 },
-      { label: "✅ Handling things well", score: 4 },
+      { label: "✅ Handling things well", score: 4 }
     ]
   }
 ];
@@ -52,35 +52,49 @@ const questions = [
 const getResult = (total) => {
   const max = questions.length * 4;
   const pct = (total / max) * 100;
-  if (pct <= 35) return {
-    label: "Struggling Right Now",
-    emoji: "💙",
-    color: "#5D6D7E",
-    message: "It sounds like you're going through a tough time. Please know that support is available. Consider reaching out to a counselor or calling a helpline — you deserve care.",
-    suggestion: "Visit our Resources page for professional help options.",
-    link: "/resources"
-  };
-  if (pct <= 55) return {
-    label: "Feeling a Bit Down",
-    emoji: "🌧️",
-    color: "#7B61FF",
-    message: "You're managing, but things feel heavier than usual. Small acts of self-care and connecting with others can help. You don't have to push through alone.",
-    suggestion: "Try our Issues page for specific coping strategies.",
-    link: "/issues"
-  };
-  if (pct <= 75) return {
-    label: "Doing Okay",
-    emoji: "🌤️",
-    color: "#4A90E2",
-    message: "You're in a decent place, but there's always room to nurture your wellbeing. Keep checking in with yourself and stay connected to what grounds you.",
-    suggestion: "Explore our mental health resources to stay ahead of stress.",
-    link: "/resources"
-  };
+
+  if (pct <= 35) {
+    return {
+      label: "Struggling Right Now",
+      emoji: "💙",
+      color: "#4B5563",
+      message:
+        "It sounds like you're going through a tough time. Please know that support is available. Consider reaching out to a counselor or calling a helpline — you deserve care.",
+      suggestion: "Visit our Resources page for professional help options.",
+      link: "/resources"
+    };
+  }
+
+  if (pct <= 55) {
+    return {
+      label: "Feeling a Bit Down",
+      emoji: "🌧️",
+      color: "#5B45D6",
+      message:
+        "You're managing, but things feel heavier than usual. Small acts of self-care and connecting with others can help. You don't have to push through alone.",
+      suggestion: "Try our Issues page for specific coping strategies.",
+      link: "/issues"
+    };
+  }
+
+  if (pct <= 75) {
+    return {
+      label: "Doing Okay",
+      emoji: "🌤️",
+      color: "#2C6FB3",
+      message:
+        "You're in a decent place, but there's always room to nurture your wellbeing. Keep checking in with yourself and stay connected to what grounds you.",
+      suggestion: "Explore our mental health resources to stay ahead of stress.",
+      link: "/resources"
+    };
+  }
+
   return {
     label: "Feeling Good",
     emoji: "🌟",
-    color: "#27AE60",
-    message: "You're in a strong place right now — that's great! Keep up the habits that support your wellbeing and remember to be there for others around you too.",
+    color: "#1F7A46",
+    message:
+      "You're in a strong place right now — that's great! Keep up the habits that support your wellbeing and remember to be there for others around you too.",
     suggestion: "Share Thrive Mind with someone who might need it.",
     link: "/"
   };
@@ -95,6 +109,7 @@ function MoodChecker() {
     const updated = [...answers];
     updated[current] = score;
     setAnswers(updated);
+
     if (current < questions.length - 1) {
       setTimeout(() => setCurrent(current + 1), 300);
     } else {
@@ -110,46 +125,78 @@ function MoodChecker() {
 
   const total = answers.reduce((sum, a) => sum + (a || 0), 0);
   const result = done ? getResult(total) : null;
-  const progress = done ? 100 : ((current) / questions.length) * 100;
+  const progress = done ? 100 : (current / questions.length) * 100;
 
   return (
     <Container className="mt-4">
       <div className="card-style">
-        <h2 style={{ marginBottom: "6px" }}>💙 Mood Quiz</h2>
-        <p style={{ color: "#6b7280", marginBottom: "16px" }}>
-          Answer {questions.length} quick questions to check in with your mental wellbeing.
+        <h1 style={{ marginBottom: "6px" }}>💙 Mood Quiz</h1>
+
+        <p style={{ color: "#4B5563", marginBottom: "16px" }}>
+          Answer {questions.length} quick questions to check in with your mental
+          wellbeing.
         </p>
 
         <ProgressBar
           now={progress}
-          style={{ height: "8px", borderRadius: "8px", marginBottom: "24px" }}
+          style={{
+            height: "8px",
+            borderRadius: "8px",
+            marginBottom: "24px"
+          }}
           variant={done ? "success" : "info"}
+          aria-label={`Mood quiz progress is ${Math.round(progress)} percent`}
         />
 
         {!done ? (
           <div>
-            <p style={{ fontSize: "0.8rem", color: "#aaa", marginBottom: "6px" }}>
+            <p
+              style={{
+                fontSize: "0.85rem",
+                color: "#4B5563",
+                marginBottom: "6px"
+              }}
+            >
               Question {current + 1} of {questions.length}
             </p>
-            <h4 style={{ color: "#4A4A4A", marginBottom: "20px", fontSize: "1.05rem" }}>
+
+            <h2
+              style={{
+                color: "#3F3F46",
+                marginBottom: "20px",
+                fontSize: "1.2rem"
+              }}
+            >
               {questions[current].question}
-            </h4>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            </h2>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px"
+              }}
+            >
               {questions[current].options.map((opt, i) => (
                 <button
                   key={i}
+                  type="button"
                   onClick={() => handleSelect(opt.score)}
                   style={{
-                    background: answers[current] === opt.score ? "linear-gradient(135deg, #CDB4DB, #A7C7E7)" : "#f8f7ff",
-                    border: "1.5px solid #e0ddf5",
+                    background:
+                      answers[current] === opt.score
+                        ? "linear-gradient(135deg, #CDB4DB, #A7C7E7)"
+                        : "#f8f7ff",
+                    border: "1.5px solid #d7d4e8",
                     borderRadius: "12px",
                     padding: "12px 16px",
                     textAlign: "left",
                     cursor: "pointer",
                     fontSize: "0.95rem",
-                    color: "#333",
+                    color: "#2F2F35",
                     transition: "all 0.15s ease",
-                    fontFamily: "inherit"
+                    fontFamily: "inherit",
+                    fontWeight: answers[current] === opt.score ? "700" : "500"
                   }}
                 >
                   {opt.label}
@@ -159,21 +206,38 @@ function MoodChecker() {
           </div>
         ) : (
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "12px" }}>{result.emoji}</div>
-            <h3 style={{ color: result.color, marginBottom: "10px" }}>{result.label}</h3>
-            <p style={{
-              padding: "16px",
-              borderRadius: "12px",
-              background: `${result.color}11`,
-              color: "#4A4A4A",
-              lineHeight: "1.6",
-              marginBottom: "16px"
-            }}>
+            <div style={{ fontSize: "3rem", marginBottom: "12px" }} aria-hidden="true">
+              {result.emoji}
+            </div>
+
+            <h2 style={{ color: result.color, marginBottom: "10px" }}>
+              {result.label}
+            </h2>
+
+            <p
+              style={{
+                padding: "16px",
+                borderRadius: "12px",
+                background: `${result.color}11`,
+                color: "#3F3F46",
+                lineHeight: "1.6",
+                marginBottom: "16px"
+              }}
+            >
               {result.message}
             </p>
-            <p style={{ color: "#7B61FF", fontSize: "0.9rem", marginBottom: "20px" }}>
+
+            <p
+              style={{
+                color: "#5B45D6",
+                fontSize: "0.95rem",
+                marginBottom: "20px",
+                fontWeight: "600"
+              }}
+            >
               💡 {result.suggestion}
             </p>
+
             <Button className="btn-custom" onClick={reset}>
               Retake Quiz
             </Button>
