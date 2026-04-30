@@ -27,7 +27,7 @@ function CustomNavbar() {
               { label: "Mood Quiz", path: "/mood" },
               { label: "Resources", path: "/resources" },
               { label: "Self-care planner", path: "/planner" },
-
+               { label: "About Us", path: "/about" }
             ].map(({ label, path }) => (
               <Nav.Link
                 key={path}

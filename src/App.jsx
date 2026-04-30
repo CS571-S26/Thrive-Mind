@@ -5,7 +5,7 @@ import MoodChecker from "./Components/MoodChecker";
 import Issues from "./Components/Issues";
 import Resources from "./Components/Resources";
 import SelfCarePlanner from "./Components/SelfCarePlanner"; // new self-care planner page
-
+import AboutUs from "./Components/AboutUs";
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
         <Route path="/issues" element={<Issues />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/planner" element={<SelfCarePlanner />} /> {/* new self-care planner route */}
+        <Route path="/about" element={<AboutUs />} />
       </Routes>
     </>
   );
