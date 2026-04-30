@@ -229,7 +229,7 @@ function AboutUs() {
 
               <Button
                 className="btn-custom"
-                href="mailto:yourgmail@gmail.com?subject=Thrive%20Mind%20Feedback"
+                href="mailto:ishafyiw@gmail.com?subject=Thrive%20Mind%20Feedback"
               >
                 Send Feedback
               </Button>
