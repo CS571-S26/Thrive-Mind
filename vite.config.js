@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/thrive-mind/',
+  base: '/p77/',
   plugins: [react()],
   build:{
     outDir: "docs"
