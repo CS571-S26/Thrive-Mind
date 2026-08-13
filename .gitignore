@@ -1,4 +1,4 @@
 node_modules/
 dist/
 .vite/
-.DS_Storegit rm -r --cached node_modules
+.DS_Store

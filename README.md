@@ -1,16 +1,50 @@
-# React + Vite
+# 🌿 Thrive Mind
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Thrive Mind is a mental wellness support hub built with React. It gives visitors a calm, welcoming space to learn about common mental health challenges, check in with their mood, find real crisis and support resources, and build small daily self-care habits.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Home** — a friendly landing page introducing the site
+- **Mental Health Issues** — plain-language explanations of stress, anxiety, burnout, loneliness, grief, and low self-esteem
+- **Mood Quiz** — a short interactive check-in that offers supportive suggestions based on how you're feeling
+- **Resources** — crisis hotlines, therapist finders, mental health apps, campus support, and educational links
+- **Self-Care Planner** — track small daily wellness habits and see your progress
+- **About Us** — who built Thrive Mind, why, and how to reach us
 
-## React Compiler
+## 🔗 Access the live site
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Thrive Mind is deployed with GitHub Pages: **https://cs571-s26.github.io/thrive-mind/**
 
-## Expanding the ESLint configuration
+No installation needed — just open the link in a browser.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Run it locally
+
+```bash
+git clone git@github.com:CS571-S26/thrive-mind.git
+cd thrive-mind
+npm install
+npm run dev
+```
+
+This starts a local dev server (Vite) with hot reload, printed in your terminal — typically `http://localhost:5173`.
+
+## 📦 Build & deploy
+
+```bash
+npm run build
+```
+
+This outputs a production build into the `docs/` folder, which is what GitHub Pages serves directly from the `main` branch. Commit and push the rebuilt `docs/` folder to publish changes to the live site.
+
+## 🧰 Tech stack
+
+- [React](https://react.dev/) + [React Router](https://reactrouter.com/) for the UI and page navigation
+- [React Bootstrap](https://react-bootstrap.github.io/) for components and layout
+- [Vite](https://vite.dev/) for local dev and production builds
+
+## 💬 Contact
+
+Built by Ishita and Charith, students at UW-Madison. Questions, feedback, or ideas? Reach out via the **About Us** page in the app, or email:
+
+- ishafyiw@gmail.com
+- charithpareddy@gmail.com

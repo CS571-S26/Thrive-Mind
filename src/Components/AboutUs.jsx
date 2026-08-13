@@ -85,7 +85,7 @@ function AboutUs() {
             }}
           >
             Hi, we are <strong>Ishita</strong> and{" "}
-            <strong>Charit</strong>, students at{" "}
+            <strong>Charith</strong>, students at{" "}
             <strong>UW-Madison</strong>. We created{" "}
             <strong>Thrive Mind</strong> as a mental wellness website focused on
             support, reflection, and accessible self care tools.
@@ -102,9 +102,8 @@ function AboutUs() {
                 border: "1.5px solid #ede7f8",
                 height: "100%",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
-                minHeight: "520px", 
-                boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
-                display: "flex", 
+                minHeight: "520px",
+                display: "flex",
                 flexDirection: "column", 
                 justifyContent: "center"
               }}
@@ -190,6 +189,38 @@ function AboutUs() {
                 style={{
                   padding: "14px 16px",
                   borderRadius: "12px",
+                  background: "rgba(123,97,255,0.08)",
+                  marginBottom: "14px"
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "#7B61FF",
+                    fontWeight: 700,
+                    marginBottom: "6px"
+                  }}
+                >
+                  Gmail
+                </div>
+
+                <a
+                  href="mailto:charithpareddy@gmail.com"
+                  style={{
+                    textDecoration: "none",
+                    color: "#4A4A4A",
+                    fontWeight: 600,
+                    wordBreak: "break-word"
+                  }}
+                >
+                  charithpareddy@gmail.com
+                </a>
+              </div>
+
+              <div
+                style={{
+                  padding: "14px 16px",
+                  borderRadius: "12px",
                   background: "rgba(224,123,160,0.09)",
                   marginBottom: "18px"
                 }}
@@ -229,7 +260,7 @@ function AboutUs() {
 
               <Button
                 className="btn-custom"
-                href="mailto:ishafyiw@gmail.com?subject=Thrive%20Mind%20Feedback"
+                href="mailto:ishafyiw@gmail.com?cc=charithpareddy@gmail.com&subject=Thrive%20Mind%20Feedback"
               >
                 Send Feedback
               </Button>
