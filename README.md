@@ -13,15 +13,15 @@ Thrive Mind is a mental wellness support hub built with React. It gives visitors
 
 ## 🔗 Access the live site
 
-Thrive Mind is deployed with GitHub Pages: **https://cs571-s26.github.io/thrive-mind/**
+Thrive Mind is deployed with GitHub Pages: **https://cs571-s26.github.io/Thrive-Mind/**
 
 No installation needed — just open the link in a browser.
 
 ## 🛠️ Run it locally
 
 ```bash
-git clone git@github.com:CS571-S26/thrive-mind.git
-cd thrive-mind
+git clone git@github.com:CS571-S26/Thrive-Mind.git
+cd Thrive-Mind
 npm install
 npm run dev
 ```
