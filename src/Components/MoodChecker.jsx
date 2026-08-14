@@ -1,9 +1,20 @@
 import { useState } from "react";
 import { Container, Button, ProgressBar } from "react-bootstrap";
-import { getLastMoodEntry, saveMoodEntry } from "../utils/moodHistory";
+import {
+  getLastMoodEntry,
+  getShortLabelForEntry,
+  saveMoodEntry
+} from "../utils/moodHistory";
+
+const DISCLAIMER =
+  "This check-in is not a diagnostic tool. It's designed to help you reflect on how you're feeling and connect you with the right kind of support.";
+
+// Display order for the category breakdown, matching how it reads best.
+const CATEGORY_ORDER = ["Mood", "Energy", "Sleep", "Connection", "Stress"];
 
 const questions = [
   {
+    category: "Energy",
     question: "How has your energy been today?",
     options: [
       { label: "😴 Very low, barely able to do things", score: 1 },
@@ -13,6 +24,7 @@ const questions = [
     ]
   },
   {
+    category: "Connection",
     question: "How connected do you feel to people around you?",
     options: [
       { label: "😢 Very isolated and alone", score: 1 },
@@ -22,6 +34,7 @@ const questions = [
     ]
   },
   {
+    category: "Sleep",
     question: "How have you been sleeping recently?",
     options: [
       { label: "😩 Very poorly — barely sleeping", score: 1 },
@@ -31,6 +44,7 @@ const questions = [
     ]
   },
   {
+    category: "Mood",
     question: "How would you describe your overall mood right now?",
     options: [
       { label: "😞 Very down or hopeless", score: 1 },
@@ -40,6 +54,7 @@ const questions = [
     ]
   },
   {
+    category: "Stress",
     question: "How well are you managing stress or worries?",
     options: [
       { label: "😰 Feeling overwhelmed", score: 1 },
@@ -57,11 +72,12 @@ const getResult = (total) => {
 
   if (pct <= 35) {
     return {
-      label: "Struggling Right Now",
+      id: "struggling",
+      label: "You may be having a difficult day",
       emoji: "💙",
       color: "#4B5563",
       message:
-        "It sounds like you're going through a tough time. Please know that support is available. Consider reaching out to a counselor or calling a helpline — you deserve care.",
+        "Your responses suggest you may benefit from support. Please know that help is available. Consider reaching out to a counselor or calling a helpline — you deserve care.",
       suggestion: "Visit our Resources page for professional help options.",
       link: "/resources"
     };
@@ -69,7 +85,8 @@ const getResult = (total) => {
 
   if (pct <= 55) {
     return {
-      label: "Feeling a Bit Down",
+      id: "down",
+      label: "Your responses suggest some areas worth paying attention to",
       emoji: "🌧️",
       color: "#5B45D6",
       message:
@@ -81,7 +98,8 @@ const getResult = (total) => {
 
   if (pct <= 75) {
     return {
-      label: "Doing Okay",
+      id: "okay",
+      label: "You seem to be doing okay today, with some ups and downs",
       emoji: "🌤️",
       color: "#2C6FB3",
       message:
@@ -92,7 +110,8 @@ const getResult = (total) => {
   }
 
   return {
-    label: "Feeling Good",
+    id: "good",
+    label: "You seem to be doing relatively well today",
     emoji: "🌟",
     color: "#1F7A46",
     message:
@@ -102,11 +121,30 @@ const getResult = (total) => {
   };
 };
 
+const getCategoryScores = (answers) => {
+  const raw = questions.map((q, i) => ({
+    category: q.category,
+    pct: Math.round(((answers[i] || 0) / 4) * 100)
+  }));
+
+  return CATEGORY_ORDER.map((category) =>
+    raw.find((entry) => entry.category === category)
+  );
+};
+
+const getFocusCategory = (categoryScores) => {
+  return categoryScores.reduce((lowest, entry) =>
+    entry.pct < lowest.pct ? entry : lowest
+  ).category;
+};
+
 function MoodChecker() {
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   const [current, setCurrent] = useState(0);
   const [done, setDone] = useState(false);
   const [lastEntry, setLastEntry] = useState(getLastMoodEntry);
+  const [categoryScores, setCategoryScores] = useState([]);
+  const [focusCategory, setFocusCategory] = useState(null);
 
   const handleSelect = (score) => {
     const updated = [...answers];
@@ -117,7 +155,14 @@ function MoodChecker() {
       setTimeout(() => setCurrent(current + 1), 300);
     } else {
       const finalTotal = updated.reduce((sum, a) => sum + (a || 0), 0);
-      setLastEntry(saveMoodEntry(getResult(finalTotal), getPct(finalTotal)));
+      const scores = getCategoryScores(updated);
+      const focus = getFocusCategory(scores);
+
+      setCategoryScores(scores);
+      setFocusCategory(focus);
+      setLastEntry(
+        saveMoodEntry(getResult(finalTotal), getPct(finalTotal), scores, focus)
+      );
       setTimeout(() => setDone(true), 300);
     }
   };
@@ -126,6 +171,8 @@ function MoodChecker() {
     setAnswers(Array(questions.length).fill(null));
     setCurrent(0);
     setDone(false);
+    setCategoryScores([]);
+    setFocusCategory(null);
   };
 
   const total = answers.reduce((sum, a) => sum + (a || 0), 0);
@@ -137,10 +184,12 @@ function MoodChecker() {
       <div className="card-style">
         <h1 style={{ marginBottom: "6px" }}>💙 Mood Quiz</h1>
 
-        <p style={{ color: "#4B5563", marginBottom: "16px" }}>
+        <p style={{ color: "#4B5563", marginBottom: "12px" }}>
           Answer {questions.length} quick questions to check in with your mental
           wellbeing.
         </p>
+
+        <p className="mood-disclaimer">{DISCLAIMER}</p>
 
         {!done && current === 0 && !answers[0] && lastEntry && (
           <p
@@ -154,7 +203,8 @@ function MoodChecker() {
             }}
           >
             {lastEntry.emoji} Last check-in on{" "}
-            {new Date(lastEntry.date).toLocaleDateString()}: {lastEntry.label}
+            {new Date(lastEntry.date).toLocaleDateString()}:{" "}
+            {getShortLabelForEntry(lastEntry)}
           </p>
         )}
 
@@ -242,11 +292,37 @@ function MoodChecker() {
                 background: `${result.color}11`,
                 color: "#3F3F46",
                 lineHeight: "1.6",
-                marginBottom: "16px"
+                marginBottom: "20px"
               }}
             >
               {result.message}
             </p>
+
+            <div className="mood-breakdown">
+              <h3 className="mood-breakdown-title">Your check-in</h3>
+
+              {categoryScores.map((entry) => (
+                <div className="mood-category-row" key={entry.category}>
+                  <span className="mood-category-label">{entry.category}</span>
+
+                  <span className="mood-category-track">
+                    <span
+                      className="mood-category-fill"
+                      style={{ width: `${entry.pct}%` }}
+                    />
+                  </span>
+
+                  <span className="mood-category-pct">{entry.pct}%</span>
+                </div>
+              ))}
+
+              {focusCategory && (
+                <p className="mood-focus-callout">
+                  🎯 Your biggest area to focus on today:{" "}
+                  <strong>{focusCategory}</strong>
+                </p>
+              )}
+            </div>
 
             <p
               style={{

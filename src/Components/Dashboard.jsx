@@ -1,10 +1,11 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
-  getFocusForLabel,
+  getFocusForEntry,
   getLastMoodEntry,
   getMoodTrend,
   getRecentEntries,
+  getShortLabelForEntry,
   getWellnessInsight
 } from "../utils/moodHistory";
 import {
@@ -40,7 +41,7 @@ function Dashboard() {
 
   const hasAnyData = Boolean(lastEntry) || todaysCompletedCount > 0 || streak > 0;
 
-  const focus = lastEntry ? getFocusForLabel(lastEntry.label) : "Getting started";
+  const focus = getFocusForEntry(lastEntry);
 
   return (
     <Container className="mt-4">
@@ -76,7 +77,7 @@ function Dashboard() {
                   <div className="dashboard-stat-label">Today's mood</div>
                   <div className="dashboard-stat-value">
                     {todaysMoodEntry
-                      ? `${todaysMoodEntry.emoji} ${todaysMoodEntry.label}`
+                      ? `${todaysMoodEntry.emoji} ${getShortLabelForEntry(todaysMoodEntry)}`
                       : "Not checked in yet"}
                   </div>
                 </div>
