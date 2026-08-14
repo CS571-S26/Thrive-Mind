@@ -1,14 +1,15 @@
 # 🌿 Thrive Mind
 
-Thrive Mind is a mental wellness support hub built with React. It gives visitors a calm, welcoming space to learn about common mental health challenges, check in with their mood, find real crisis and support resources, and build small daily self-care habits.
+Thrive Mind is a mental wellness hub built with React, for college students. It gives visitors a calm, welcoming space to check in with their mood, learn about challenges common in college life — from academic stress to homesickness — find real crisis and campus support resources, and build small daily self-care habits.
 
 ## ✨ Features
 
-- **Home** — a friendly landing page introducing the site
-- **Mental Health Issues** — plain-language explanations of stress, anxiety, burnout, loneliness, grief, and low self-esteem
-- **Mood Quiz** — a short interactive check-in that offers supportive suggestions based on how you're feeling
-- **Resources** — crisis hotlines, therapist finders, mental health apps, campus support, and educational links
-- **Self-Care Planner** — track small daily wellness habits and see your progress
+- **Home** — a needs-based landing page ("I'm feeling overwhelmed", "I feel lonely", etc.) that routes straight to the relevant help
+- **My Wellness** — a personal dashboard pulling together your mood trend, self-care streak, and a recommended next step
+- **Mental Health Issues** — plain-language explanations of stress, academic pressure, anxiety, burnout, procrastination, loneliness, homesickness, and more
+- **Mood Quiz** — a short check-in (not a diagnostic tool) with a per-category breakdown across mood, energy, sleep, connection, and stress
+- **Resources** — a verified UW–Madison support table (crisis line, counseling, Let's Talk, and more) plus crisis hotlines, therapist finders, apps, and educational links
+- **Self-Care Planner** — track small daily wellness habits, with a streak and monthly total
 - **About Us** — who built Thrive Mind, why, and how to reach us
 
 ## 🔗 Access the live site

@@ -335,9 +335,18 @@ a {
   margin: 0;
 }
 
+.home-hero-kicker {
+  color: var(--accessible-purple);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin: 12px 0 0;
+}
+
 .home-hero-title {
   font-size: 2.4rem;
-  margin: 12px 0 10px;
+  margin: 8px 0 10px;
 }
 
 .home-hero-subtitle {

@@ -36,13 +36,16 @@ function Home() {
           🌿
         </p>
 
+        <p className="home-hero-kicker">🎓 Mental Wellness for College Students</p>
+
         <h1 className="home-hero-title">
           Feel better. Understand yourself. Find support.
         </h1>
 
         <p className="home-hero-subtitle">
-          Thrive Mind is your mental health support hub — a safe space to
-          check in, reflect, and connect with the right kind of help.
+          Thrive Mind is a mental wellness hub built for college students — a
+          safe space to check in, reflect, and connect with the right kind of
+          help, from campus resources to crisis support.
         </p>
 
         <div className="home-hero-actions">
