@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
@@ -46,6 +47,13 @@ function Dashboard() {
   const focus = getFocusForEntry(lastEntry);
   const recommendedActions = getRecommendedActions(lastEntry);
 
+  const [barsVisible, setBarsVisible] = useState(false);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setBarsVisible(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
     <Container className="mt-4">
       <div className="card-style">
@@ -78,7 +86,7 @@ function Dashboard() {
           <>
             <Row className="g-3 mb-4">
               <Col sm={6} lg={3}>
-                <div className="dashboard-stat-tile">
+                <div className="dashboard-stat-tile fade-in-item" style={{ animationDelay: "0s" }}>
                   <div className="dashboard-stat-label">Today's mood</div>
                   <div className="dashboard-stat-value">
                     {todaysMoodEntry
@@ -89,7 +97,7 @@ function Dashboard() {
               </Col>
 
               <Col sm={6} lg={3}>
-                <div className="dashboard-stat-tile">
+                <div className="dashboard-stat-tile fade-in-item" style={{ animationDelay: "0.06s" }}>
                   <div className="dashboard-stat-label">7-day trend</div>
                   <div className="dashboard-stat-value">
                     {TREND_ARROW[trend.direction]} {trend.label}
@@ -98,7 +106,7 @@ function Dashboard() {
               </Col>
 
               <Col sm={6} lg={3}>
-                <div className="dashboard-stat-tile">
+                <div className="dashboard-stat-tile fade-in-item" style={{ animationDelay: "0.12s" }}>
                   <div className="dashboard-stat-label">Habits today</div>
                   <div className="dashboard-stat-value">
                     {todaysCompletedCount}/{DEFAULT_TASKS.length}
@@ -107,7 +115,7 @@ function Dashboard() {
               </Col>
 
               <Col sm={6} lg={3}>
-                <div className="dashboard-stat-tile">
+                <div className="dashboard-stat-tile fade-in-item" style={{ animationDelay: "0.18s" }}>
                   <div className="dashboard-stat-label">Current focus</div>
                   <div className="dashboard-stat-value">{focus}</div>
                 </div>
@@ -142,7 +150,11 @@ function Dashboard() {
                           <div className="dashboard-history-bar-track">
                             <div
                               className="dashboard-history-bar-fill"
-                              style={{ height: `${Math.max(entry.pct, 6)}%` }}
+                              style={{
+                                height: barsVisible
+                                  ? `${Math.max(entry.pct, 6)}%`
+                                  : "0%"
+                              }}
                             />
                           </div>
                           <div className="dashboard-history-emoji">

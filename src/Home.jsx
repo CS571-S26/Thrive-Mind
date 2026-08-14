@@ -68,12 +68,12 @@ function Home() {
         <h2 className="home-need-title">What do you need right now?</h2>
 
         <Row className="g-3">
-          {needs.map(({ emoji, label, path, color }) => (
+          {needs.map(({ emoji, label, path, color }, index) => (
             <Col key={path} sm={6} lg={3}>
               <Link
                 to={path}
-                className="home-need-card"
-                style={{ "--card-accent": color }}
+                className="home-need-card fade-in-item"
+                style={{ "--card-accent": color, animationDelay: `${index * 0.06}s` }}
               >
                 <div className="home-need-emoji" aria-hidden="true">
                   {emoji}

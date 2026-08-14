@@ -46,6 +46,30 @@
   box-sizing: border-box;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card-style,
+  .home-hero,
+  .planner-card {
+    animation: fadeInUp 0.4s ease both;
+  }
+
+  .fade-in-item {
+    opacity: 0;
+    animation: fadeInUp 0.4s ease forwards;
+  }
+}
+
 body {
   margin: 0;
   background: linear-gradient(135deg, var(--color-bg) 0%, #f3efe6 100%);

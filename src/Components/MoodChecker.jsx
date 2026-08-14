@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Button, ProgressBar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
@@ -148,6 +148,13 @@ function MoodChecker() {
   const [lastEntry, setLastEntry] = useState(getLastMoodEntry);
   const [categoryScores, setCategoryScores] = useState([]);
   const [focusCategory, setFocusCategory] = useState(null);
+  const [barsVisible, setBarsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!done) return;
+    const frame = requestAnimationFrame(() => setBarsVisible(true));
+    return () => cancelAnimationFrame(frame);
+  }, [done]);
 
   const handleSelect = (score) => {
     const updated = [...answers];
@@ -176,6 +183,7 @@ function MoodChecker() {
     setDone(false);
     setCategoryScores([]);
     setFocusCategory(null);
+    setBarsVisible(false);
   };
 
   const total = answers.reduce((sum, a) => sum + (a || 0), 0);
@@ -313,7 +321,7 @@ function MoodChecker() {
                   <span className="mood-category-track">
                     <span
                       className="mood-category-fill"
-                      style={{ width: `${entry.pct}%` }}
+                      style={{ width: barsVisible ? `${entry.pct}%` : "0%" }}
                     />
                   </span>
 
