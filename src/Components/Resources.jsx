@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { useSearchParams } from "react-router-dom";
 
 const sections = [
   {
+    id: "crisis-hotlines",
     title: "🆘 Crisis Hotlines",
     color: "#B24373",
     items: [
@@ -32,6 +35,7 @@ const sections = [
     ]
   },
   {
+    id: "find-a-therapist",
     title: "🩺 Find a Therapist",
     color: "#5B45D6",
     items: [
@@ -62,6 +66,7 @@ const sections = [
     ]
   },
   {
+    id: "psychiatrists-medication",
     title: "💊 Psychiatrists & Medication",
     color: "#2C6FB3",
     items: [
@@ -92,6 +97,7 @@ const sections = [
     ]
   },
   {
+    id: "mental-health-apps",
     title: "📱 Mental Health Apps",
     color: "#7A4FB3",
     items: [
@@ -122,6 +128,7 @@ const sections = [
     ]
   },
   {
+    id: "campus-counseling",
     title: "🎓 Campus & Online Counseling",
     color: "#1F7A46",
     items: [
@@ -152,6 +159,7 @@ const sections = [
     ]
   },
   {
+    id: "self-help-education",
     title: "📖 Self-Help & Education",
     color: "#8A5A00",
     items: [
@@ -184,6 +192,23 @@ const sections = [
 ];
 
 function Resources() {
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const target = searchParams.get("section");
+    if (!target) return;
+
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(target)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+
+    return () => cancelAnimationFrame(frame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Container className="mt-4">
       <div className="card-style">
@@ -197,6 +222,7 @@ function Resources() {
         {sections.map((section, si) => (
           <section
             key={si}
+            id={section.id}
             className="resources-section"
             style={{ "--card-accent": section.color }}
           >

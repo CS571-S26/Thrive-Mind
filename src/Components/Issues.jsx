@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { useSearchParams } from "react-router-dom";
 
 const issues = [
   {
+    id: "stress",
     name: "Stress",
     emoji: "😓",
     color: "#5B45D6",
@@ -11,6 +13,7 @@ const issues = [
     extra: "Chronic stress can affect sleep and physical health. Consider speaking to a counselor if it persists."
   },
   {
+    id: "anxiety",
     name: "Anxiety",
     emoji: "😰",
     color: "#2C6FB3",
@@ -19,6 +22,7 @@ const issues = [
     extra: "Anxiety disorders are common mental health conditions. A therapist can help with tools like CBT."
   },
   {
+    id: "burnout",
     name: "Burnout",
     emoji: "🔥",
     color: "#B24373",
@@ -27,6 +31,7 @@ const issues = [
     extra: "Burnout can look like exhaustion, cynicism, and reduced effectiveness. Prioritizing rest is not weakness."
   },
   {
+    id: "loneliness",
     name: "Loneliness",
     emoji: "💔",
     color: "#7A4FB3",
@@ -35,6 +40,7 @@ const issues = [
     extra: "Social connection matters. Even small moments of connection can help you feel less alone."
   },
   {
+    id: "fear",
     name: "Fear",
     emoji: "😨",
     color: "#2C6FB3",
@@ -43,6 +49,7 @@ const issues = [
     extra: "Fear becomes harder when it stops you from living your life. Counseling can help you build tools to manage it."
   },
   {
+    id: "depression",
     name: "Depression",
     emoji: "😔",
     color: "#4B5563",
@@ -51,6 +58,7 @@ const issues = [
     extra: "Depression is not a character flaw. It is a condition that can improve with support and treatment."
   },
   {
+    id: "grief",
     name: "Grief",
     emoji: "🕊️",
     color: "#4B5563",
@@ -59,6 +67,7 @@ const issues = [
     extra: "Grief has no fixed timeline. Be patient with yourself and accept help when offered."
   },
   {
+    id: "low-self-esteem",
     name: "Low Self-Esteem",
     emoji: "😞",
     color: "#7A4FB3",
@@ -69,7 +78,27 @@ const issues = [
 ];
 
 function Issues() {
-  const [expanded, setExpanded] = useState(null);
+  const [searchParams] = useSearchParams();
+  const openId = searchParams.get("open");
+  const initialIndex = issues.findIndex((issue) => issue.id === openId);
+  const [expanded, setExpanded] = useState(
+    initialIndex === -1 ? null : initialIndex
+  );
+  const cardRefs = useRef([]);
+
+  useEffect(() => {
+    if (initialIndex === -1) return;
+
+    const frame = requestAnimationFrame(() => {
+      cardRefs.current[initialIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    });
+
+    return () => cancelAnimationFrame(frame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container className="mt-4">
@@ -91,6 +120,7 @@ function Issues() {
           {issues.map((issue, index) => (
             <Col key={index} md={6} lg={6}>
               <button
+                ref={(el) => (cardRefs.current[index] = el)}
                 type="button"
                 onClick={() => setExpanded(expanded === index ? null : index)}
                 aria-expanded={expanded === index}
