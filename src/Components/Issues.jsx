@@ -13,6 +13,15 @@ const issues = [
     extra: "Chronic stress can affect sleep and physical health. Consider speaking to a counselor if it persists."
   },
   {
+    id: "academic-pressure",
+    name: "Academic Pressure & Exam Stress",
+    emoji: "📝",
+    color: "#1F7A46",
+    tip1: "Break study sessions into 25-minute focused blocks with short breaks (the Pomodoro technique).",
+    tip2: "Talk to your professor or TA early if you're struggling — office hours exist for this.",
+    extra: "UW–Madison's Thrive Online has a dedicated test anxiety module, and UHS runs wellness workshops during exam season."
+  },
+  {
     id: "anxiety",
     name: "Anxiety",
     emoji: "😰",
@@ -31,6 +40,15 @@ const issues = [
     extra: "Burnout can look like exhaustion, cynicism, and reduced effectiveness. Prioritizing rest is not weakness."
   },
   {
+    id: "procrastination",
+    name: "Procrastination",
+    emoji: "⏳",
+    color: "#7A4FB3",
+    tip1: "Start with just five minutes on the task — momentum is easier to build than to start from zero.",
+    tip2: "Break big assignments into smaller, concrete next steps instead of one large task.",
+    extra: "Procrastination is often about managing difficult emotions, not laziness. UW's Thrive Online has a procrastination module if it's a recurring pattern."
+  },
+  {
     id: "loneliness",
     name: "Loneliness",
     emoji: "💔",
@@ -38,6 +56,15 @@ const issues = [
     tip1: "Reach out to one person you trust today — even a short text helps.",
     tip2: "Join a community, support group, or campus organization to find connection.",
     extra: "Social connection matters. Even small moments of connection can help you feel less alone."
+  },
+  {
+    id: "homesickness",
+    name: "Homesickness",
+    emoji: "🏠",
+    color: "#8A5A00",
+    tip1: "Schedule regular calls with family or friends from home to stay connected.",
+    tip2: "Explore campus clubs or organizations tied to your interests or background — familiar community helps.",
+    extra: "Homesickness is extremely common, especially in your first year, and tends to ease as you build new routines and connections."
   },
   {
     id: "fear",
@@ -108,8 +135,9 @@ function Issues() {
         </h1>
 
         <p style={{ color: "#4B5563", marginBottom: "24px" }}>
-          Explore common challenges and supportive actions. Click any card to
-          learn more.
+          Explore common challenges — including ones especially familiar to
+          college students — and supportive actions. Click any card to learn
+          more.
         </p>
 
         <h2 className="visually-hidden-custom">
@@ -211,6 +239,52 @@ function Issues() {
             </Col>
           ))}
         </Row>
+
+        <div className="issues-sources">
+          <p className="issues-sources-disclaimer">
+            The information on this page is for general education and
+            reflection, not medical advice or diagnosis. For clinical
+            guidance, these organizations are a good place to start:
+          </p>
+
+          <div className="issues-sources-links">
+            <a
+              href="https://www.uhs.wisc.edu/mental-health/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              UW–Madison UHS
+            </a>
+            <a
+              href="https://www.nimh.nih.gov/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              NIMH
+            </a>
+            <a
+              href="https://www.samhsa.gov/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              SAMHSA
+            </a>
+            <a
+              href="https://www.cdc.gov/mental-health/index.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              CDC
+            </a>
+            <a
+              href="https://www.nami.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              NAMI
+            </a>
+          </div>
+        </div>
       </div>
     </Container>
   );
