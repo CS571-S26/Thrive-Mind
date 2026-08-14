@@ -2,27 +2,30 @@ import { Container, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function Home() {
-  const cards = [
+  const needs = [
     {
-      emoji: "🧠",
-      title: "Mental Health Issues",
-      desc: "Explore common challenges like stress, anxiety, and burnout with guided support.",
-      path: "/issues",
+      emoji: "😰",
+      label: "I'm feeling overwhelmed",
+      path: "/issues?open=stress",
       color: "#5B45D6"
     },
     {
-      emoji: "📚",
-      title: "Resources",
-      desc: "Find therapists, hotlines, apps, and professional help whenever you need it.",
-      path: "/resources",
+      emoji: "😴",
+      label: "I'm exhausted",
+      path: "/issues?open=burnout",
+      color: "#B24373"
+    },
+    {
+      emoji: "🧑‍🤝‍🧑",
+      label: "I feel lonely",
+      path: "/issues?open=loneliness",
       color: "#7A4FB3"
     },
     {
-      emoji: "💗",
-      title: "Self-Care Planner",
-      desc: "You do not need a perfect day. Just a few small acts of care can make a difference.",
-      path: "/planner",
-      color: "#B24373"
+      emoji: "💬",
+      label: "I want someone to talk to",
+      path: "/resources?section=campus-counseling",
+      color: "#1F7A46"
     }
   ];
 
@@ -33,52 +36,51 @@ function Home() {
           🌿
         </p>
 
-        <h1 className="home-hero-title">Welcome to Thrive Mind</h1>
+        <h1 className="home-hero-title">
+          Feel better. Understand yourself. Find support.
+        </h1>
 
         <p className="home-hero-subtitle">
-          Your mental health support hub — a safe space to explore, reflect,
-          and find help.
+          Thrive Mind is your mental health support hub — a safe space to
+          check in, reflect, and connect with the right kind of help.
         </p>
 
-        <Button as={Link} to="/mood" className="btn-custom home-hero-cta">
-          Check Your Mood →
-        </Button>
+        <div className="home-hero-actions">
+          <Button as={Link} to="/mood" className="btn-custom home-hero-cta">
+            Check My Mood →
+          </Button>
+
+          <Button
+            as={Link}
+            to="/resources"
+            className="home-hero-cta-secondary"
+          >
+            Find Support →
+          </Button>
+        </div>
       </div>
 
-      <h2 className="visually-hidden-custom">
-        Explore Thrive Mind Features
-      </h2>
+      <div className="home-need-section">
+        <h2 className="home-need-title">What do you need right now?</h2>
 
-      <Row className="g-4 mb-4">
-        {cards.map(({ emoji, title, desc, path, color }) => (
-          <Col key={path} md={4}>
-            <div className="card-style home-card">
-              <div>
-                <div className="home-card-emoji" aria-hidden="true">
+        <Row className="g-3">
+          {needs.map(({ emoji, label, path, color }) => (
+            <Col key={path} sm={6} lg={3}>
+              <Link
+                to={path}
+                className="home-need-card"
+                style={{ "--card-accent": color }}
+              >
+                <div className="home-need-emoji" aria-hidden="true">
                   {emoji}
                 </div>
 
-                <h3
-                  className="home-card-title"
-                  style={{ "--card-accent": color }}
-                >
-                  {title}
-                </h3>
-
-                <p className="home-card-desc">{desc}</p>
-              </div>
-
-              <Button
-                as={Link}
-                to={path}
-                className="btn-custom mt-3 home-card-cta"
-              >
-                Explore →
-              </Button>
-            </div>
-          </Col>
-        ))}
-      </Row>
+                <div className="home-need-label">{label}</div>
+              </Link>
+            </Col>
+          ))}
+        </Row>
+      </div>
 
       <div className="home-footer-note">
         💜 You are not alone. Help is always here.
