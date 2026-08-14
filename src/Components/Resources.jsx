@@ -47,7 +47,7 @@ const sections = [
   {
     id: "crisis-hotlines",
     title: "🆘 Crisis Hotlines",
-    color: "#B24373",
+    color: "#A6403D",
     items: [
       {
         name: "988 Suicide & Crisis Lifeline",

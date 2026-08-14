@@ -8,10 +8,10 @@ function CustomNavbar() {
     <Navbar
       expand="lg"
       style={{
-        background: "linear-gradient(90deg, #CDB4DB, #A7C7E7)",
+        background: "linear-gradient(90deg, var(--color-lavender), var(--color-primary-light))",
         borderRadius: "14px",
         margin: "10px",
-        boxShadow: "0 4px 14px rgba(123,97,255,0.15)"
+        boxShadow: "0 4px 14px rgba(67,56,202,0.15)"
       }}
     >
       <Container>

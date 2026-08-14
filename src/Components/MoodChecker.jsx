@@ -258,7 +258,7 @@ function MoodChecker() {
                   style={{
                     background:
                       answers[current] === opt.score
-                        ? "linear-gradient(135deg, #CDB4DB, #A7C7E7)"
+                        ? "linear-gradient(135deg, var(--color-lavender), var(--color-primary-light))"
                         : "#f8f7ff",
                     border: "1.5px solid #d7d4e8",
                     borderRadius: "12px",

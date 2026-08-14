@@ -5,21 +5,21 @@ function AboutUs() {
     {
       emoji: "💗",
       title: "Why We Built Thrive Mind",
-      color: "#E07BA0",
+      color: "#B24373",
       text:
         "We built Thrive Mind to create a calm and welcoming space where users can learn about mental health, reflect on how they are feeling, and find support resources in one place."
     },
     {
       emoji: "🌿",
       title: "Our Goal",
-      color: "#7B61FF",
+      color: "#5B45D6",
       text:
         "Our goal is to make mental wellness support feel more approachable, gentle, and easy to explore. We wanted the website to feel supportive instead of overwhelming."
     },
     {
       emoji: "✨",
       title: "What We Learned",
-      color: "#4A90E2",
+      color: "#2C6FB3",
       text:
         "This project helped us practice React, routing, reusable components, React Bootstrap, state management, and building interactive features with a thoughtful user experience."
     }
@@ -29,28 +29,28 @@ function AboutUs() {
     {
       emoji: "💙",
       title: "Mood Quiz",
-      color: "#4A90E2",
+      color: "#2C6FB3",
       text:
         "A short interactive check in that helps users reflect on their current mood and receive supportive suggestions."
     },
     {
       emoji: "🧠",
       title: "Mental Health Issues",
-      color: "#7B61FF",
+      color: "#5B45D6",
       text:
         "A page that explains common challenges like stress, anxiety, burnout, loneliness, grief, and low self esteem."
     },
     {
       emoji: "📚",
       title: "Resources",
-      color: "#C084FC",
+      color: "#7A4FB3",
       text:
         "A collection of crisis lines, therapy resources, mental health apps, campus support, and educational links."
     },
     {
       emoji: "💗",
       title: "Self Care Planner",
-      color: "#E07BA0",
+      color: "#B24373",
       text:
         "An interactive planner where users can track small daily wellness habits and see their progress."
     }
