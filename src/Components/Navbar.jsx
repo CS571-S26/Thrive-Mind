@@ -23,6 +23,7 @@ function CustomNavbar() {
           <Nav className="ms-auto gap-1">
             {[
               { label: "Home", path: "/" },
+              { label: "My Wellness", path: "/wellness" },
               { label: "Mental Health Issues", path: "/issues" },
               { label: "Mood Quiz", path: "/mood" },
               { label: "Resources", path: "/resources" },

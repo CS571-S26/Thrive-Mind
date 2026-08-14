@@ -8,6 +8,7 @@ import SelfCarePlanner from "./Components/SelfCarePlanner"; // new self-care pla
 import AboutUs from "./Components/AboutUs";
 import NotFound from "./Components/NotFound";
 import CrisisBanner from "./Components/CrisisBanner";
+import Dashboard from "./Components/Dashboard";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/issues" element={<Issues />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/planner" element={<SelfCarePlanner />} /> {/* new self-care planner route */}
+        <Route path="/wellness" element={<Dashboard />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
