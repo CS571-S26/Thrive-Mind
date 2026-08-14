@@ -2,6 +2,47 @@ import { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 
+// Verified directly against uhs.wisc.edu (Aug 2026). If UHS restructures
+// their site, re-check these before trusting the links/numbers again.
+const uwSupportRows = [
+  {
+    need: "Crisis (24/7)",
+    resource: "UHS Crisis Support Line",
+    desc: "Call 608-265-5600, option 9 — staffed 24/7 by licensed professionals.",
+    link: "https://www.uhs.wisc.edu/mental-health/"
+  },
+  {
+    need: "Counseling",
+    resource: "Individual Counseling",
+    desc: "Free, confidential one-on-one sessions with a UHS counselor.",
+    link: "https://www.uhs.wisc.edu/mental-health/individual/"
+  },
+  {
+    need: "Drop-in support",
+    resource: "Let's Talk",
+    desc: "No appointment needed — informal, confidential drop-in consultations around campus.",
+    link: "https://www.uhs.wisc.edu/mental-health/lets-talk/"
+  },
+  {
+    need: "Peer support",
+    resource: "Group Counseling",
+    desc: "Small groups (6–8 students) to connect with others facing similar experiences.",
+    link: "https://uhs.wisc.edu/mental-health/group-counseling/"
+  },
+  {
+    need: "Self-guided tools",
+    resource: "Thrive Online",
+    desc: "Self-paced modules on test anxiety, stress management, and procrastination.",
+    link: "https://www.uhs.wisc.edu/mental-health/thrive-online/"
+  },
+  {
+    need: "Graduate students",
+    resource: "Graduate School Student Wellbeing",
+    desc: "Wellbeing support and resource referral specifically for graduate students.",
+    link: "https://grad.wisc.edu/current-students/wellbeing/"
+  }
+];
+
 const sections = [
   {
     id: "crisis-hotlines",
@@ -128,16 +169,10 @@ const sections = [
     ]
   },
   {
-    id: "campus-counseling",
-    title: "🎓 Campus & Online Counseling",
+    id: "online-counseling",
+    title: "💻 Online Counseling",
     color: "#1F7A46",
     items: [
-      {
-        name: "UW-Madison UHS Counseling",
-        desc: "Free and low-cost counseling for UW-Madison students.",
-        link: "https://uhs.wisc.edu/mental-health/",
-        label: "uhs.wisc.edu"
-      },
       {
         name: "BetterHelp",
         desc: "Online therapy with licensed counselors.",
@@ -218,6 +253,36 @@ function Resources() {
           You are not alone. Here are trusted resources to help you find the
           right support — from crisis lines to therapists, apps, and more.
         </p>
+
+        <section id="uw-madison-support" className="resources-section">
+          <h2 className="resources-section-title uw-support-title">
+            🎓 UW–Madison Support
+          </h2>
+
+          <p className="uw-support-subtitle">
+            Thrive Mind was built for UW–Madison students. These are the
+            university's own mental health services, verified directly
+            against uhs.wisc.edu.
+          </p>
+
+          <div className="uw-support-table">
+            {uwSupportRows.map((row) => (
+              <a
+                key={row.need}
+                href={row.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="uw-support-row"
+              >
+                <span className="uw-support-need">{row.need}</span>
+                <span className="uw-support-resource">
+                  <strong>{row.resource}</strong>
+                  <span className="uw-support-desc">{row.desc}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
 
         {sections.map((section, si) => (
           <section

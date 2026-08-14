@@ -24,7 +24,7 @@ function Home() {
     {
       emoji: "💬",
       label: "I want someone to talk to",
-      path: "/resources?section=campus-counseling",
+      path: "/resources?section=uw-madison-support",
       color: "#1F7A46"
     }
   ];
