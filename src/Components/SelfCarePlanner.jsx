@@ -14,6 +14,7 @@ import {
   saveEntryForDate
 } from "../utils/selfCareHistory";
 import { DEFAULT_TASKS } from "../utils/selfCareTasks";
+import Icon from "./Icon";
 
 function SelfCarePlanner() {
   const [checkedItems, setCheckedItems] = useState(() =>
@@ -81,8 +82,8 @@ function SelfCarePlanner() {
         <Card className="planner-card border-0 shadow-sm">
           <Card.Body className="p-4 p-md-5">
             <div className="planner-header">
-              <h1 style={{ marginBottom: "6px" }}>
-                💗 Self-Care Planner
+              <h1 className="page-title">
+                <Icon name="planner" size={28} /> Self-Care Planner
               </h1>
 
               <h2
@@ -123,7 +124,7 @@ function SelfCarePlanner() {
 
                   <span
   style={{
-    backgroundColor: "#3b82f6",
+    backgroundColor: "var(--accessible-purple)",
     color: "#ffffff",
     borderRadius: "14px",
     fontWeight: "700",

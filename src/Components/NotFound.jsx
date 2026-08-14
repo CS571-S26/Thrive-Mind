@@ -1,11 +1,14 @@
 import { Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Icon from "./Icon";
 
 function NotFound() {
   return (
     <Container className="mt-4">
       <div className="card-style" style={{ textAlign: "center", padding: "48px 24px" }}>
-        <p style={{ fontSize: "2.8rem", margin: 0 }}>🌱</p>
+        <div style={{ display: "flex", justifyContent: "center", color: "var(--accessible-purple)" }}>
+          <Icon name="compass" size={40} />
+        </div>
 
         <h1 style={{ margin: "12px 0 10px" }}>Page Not Found</h1>
 

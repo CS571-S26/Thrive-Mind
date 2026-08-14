@@ -15,6 +15,7 @@ import {
 } from "../utils/selfCareHistory";
 import { DEFAULT_TASKS } from "../utils/selfCareTasks";
 import { getRecommendedActions, TYPE_LABELS } from "../utils/recommendations";
+import Icon from "./Icon";
 
 const TREND_ARROW = { up: "↗", down: "↘", flat: "→", unknown: "—" };
 
@@ -48,7 +49,9 @@ function Dashboard() {
   return (
     <Container className="mt-4">
       <div className="card-style">
-        <h1 style={{ marginBottom: "6px" }}>🌱 My Wellness</h1>
+        <h1 className="page-title">
+          <Icon name="sprout" size={28} /> My Wellness
+        </h1>
 
         <p style={{ color: "#4B5563", marginBottom: "24px" }}>
           A quick snapshot of how you've been doing, pulled together from your

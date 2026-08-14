@@ -1,5 +1,6 @@
 import { Container, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Icon from "./Components/Icon";
 
 function Home() {
   const needs = [
@@ -32,9 +33,9 @@ function Home() {
   return (
     <Container className="mt-4">
       <div className="home-hero">
-        <p className="home-hero-emoji" aria-hidden="true">
-          🌿
-        </p>
+        <div className="home-hero-icon">
+          <Icon name="leaf" size={40} />
+        </div>
 
         <p className="home-hero-kicker">🎓 Mental Wellness for College Students</p>
 

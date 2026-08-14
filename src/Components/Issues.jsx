@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
+import Icon from "./Icon";
 
 const issues = [
   {
@@ -130,8 +131,8 @@ function Issues() {
   return (
     <Container className="mt-4">
       <div className="card-style">
-        <h1 style={{ marginBottom: "6px" }}>
-          🧠 Mental Health Issues
+        <h1 className="page-title">
+          <Icon name="brain" size={28} /> Mental Health Issues
         </h1>
 
         <p style={{ color: "#4B5563", marginBottom: "24px" }}>

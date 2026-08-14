@@ -7,6 +7,7 @@ import {
   saveMoodEntry
 } from "../utils/moodHistory";
 import { getRecommendedActions, TYPE_LABELS } from "../utils/recommendations";
+import Icon from "./Icon";
 
 const DISCLAIMER =
   "This check-in is not a diagnostic tool. It's designed to help you reflect on how you're feeling and connect you with the right kind of support.";
@@ -184,7 +185,9 @@ function MoodChecker() {
   return (
     <Container className="mt-4">
       <div className="card-style">
-        <h1 style={{ marginBottom: "6px" }}>💙 Mood Quiz</h1>
+        <h1 className="page-title">
+          <Icon name="heart" size={28} /> Mood Quiz
+        </h1>
 
         <p style={{ color: "#4B5563", marginBottom: "12px" }}>
           Answer {questions.length} quick questions to check in with your mental

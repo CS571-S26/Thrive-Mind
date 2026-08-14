@@ -1,5 +1,6 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
+import Icon from "./Icon";
 
 function CustomNavbar() {
   const location = useLocation();
@@ -15,8 +16,20 @@ function CustomNavbar() {
       }}
     >
       <Container>
-        <Navbar.Brand as={Link} to="/" style={{ fontWeight: "bold", fontSize: "1.2rem", color: "#333" }}>
-          🌿 Thrive Mind
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontWeight: "bold",
+            fontSize: "1.2rem",
+            color: "#333"
+          }}
+        >
+          <Icon name="leaf" size={22} />
+          Thrive Mind
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="main-nav" />
         <Navbar.Collapse id="main-nav">

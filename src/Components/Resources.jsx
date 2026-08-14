@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
+import Icon from "./Icon";
 
 // Verified directly against uhs.wisc.edu (Aug 2026). If UHS restructures
 // their site, re-check these before trusting the links/numbers again.
@@ -247,7 +248,9 @@ function Resources() {
   return (
     <Container className="mt-4">
       <div className="card-style">
-        <h1 style={{ marginBottom: "6px" }}>📚 Resources</h1>
+        <h1 className="page-title">
+          <Icon name="book" size={28} /> Resources
+        </h1>
 
         <p className="resources-intro">
           You are not alone. Here are trusted resources to help you find the

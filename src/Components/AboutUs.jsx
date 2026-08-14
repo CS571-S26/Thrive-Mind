@@ -1,4 +1,5 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
+import Icon from "./Icon";
 
 function AboutUs() {
   const teamCards = [
@@ -60,9 +61,9 @@ function AboutUs() {
     <Container className="mt-4">
       <div className="card-style">
         <div className="about-hero">
-          <p className="about-hero-emoji" aria-hidden="true">
-            🌸
-          </p>
+          <div className="about-hero-icon">
+            <Icon name="users" size={36} />
+          </div>
 
           <h1 className="about-hero-title">About Us</h1>
 

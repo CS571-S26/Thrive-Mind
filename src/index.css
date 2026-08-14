@@ -124,6 +124,17 @@ a {
   background: linear-gradient(90deg, var(--color-lavender), var(--accessible-purple)) !important;
 }
 
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.page-title svg {
+  flex-shrink: 0;
+}
+
 .visually-hidden-custom {
   position: absolute !important;
   width: 1px !important;
@@ -278,6 +289,10 @@ a {
   font-weight: 700;
 }
 
+.crisis-banner-icon {
+  vertical-align: -3px;
+}
+
 .mood-disclaimer {
   font-size: 0.8rem;
   color: var(--text-light);
@@ -428,9 +443,10 @@ a {
   box-shadow: 0 8px 28px rgba(67, 56, 202, 0.1);
 }
 
-.home-hero-emoji {
-  font-size: 2.8rem;
-  margin: 0;
+.home-hero-icon {
+  color: var(--accessible-purple);
+  display: flex;
+  justify-content: center;
 }
 
 .home-hero-kicker {
@@ -538,9 +554,10 @@ a {
   box-shadow: 0 8px 28px rgba(67, 56, 202, 0.1);
 }
 
-.about-hero-emoji {
-  font-size: 2.8rem;
-  margin: 0;
+.about-hero-icon {
+  color: var(--accessible-purple);
+  display: flex;
+  justify-content: center;
 }
 
 .about-hero-title {
