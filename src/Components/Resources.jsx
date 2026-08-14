@@ -189,24 +189,18 @@ function Resources() {
       <div className="card-style">
         <h1 style={{ marginBottom: "6px" }}>📚 Resources</h1>
 
-        <p style={{ color: "#4B5563", marginBottom: "28px" }}>
+        <p className="resources-intro">
           You are not alone. Here are trusted resources to help you find the
           right support — from crisis lines to therapists, apps, and more.
         </p>
 
         {sections.map((section, si) => (
-          <section key={si} style={{ marginBottom: "32px" }}>
-            <h2
-              style={{
-                color: section.color,
-                marginBottom: "14px",
-                borderBottom: `2px solid ${section.color}33`,
-                paddingBottom: "8px",
-                fontSize: "1.35rem"
-              }}
-            >
-              {section.title}
-            </h2>
+          <section
+            key={si}
+            className="resources-section"
+            style={{ "--card-accent": section.color }}
+          >
+            <h2 className="resources-section-title">{section.title}</h2>
 
             <Row className="g-3">
               {section.items.map((item, ii) => (
@@ -215,55 +209,15 @@ function Resources() {
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ textDecoration: "none" }}
+                    className="resources-card-link"
                     aria-label={`${item.name}: ${item.desc}`}
                   >
-                    <div
-                      style={{
-                        padding: "14px 16px",
-                        borderRadius: "12px",
-                        border: `1.5px solid ${section.color}33`,
-                        background: `${section.color}08`,
-                        height: "100%",
-                        transition: "all 0.18s ease",
-                        cursor: "pointer"
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.boxShadow = `0 4px 16px ${section.color}30`)
-                      }
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.boxShadow = "none")
-                      }
-                    >
-                      <h3
-                        style={{
-                          fontWeight: "700",
-                          color: section.color,
-                          marginBottom: "4px",
-                          fontSize: "0.97rem"
-                        }}
-                      >
-                        {item.name}
-                      </h3>
+                    <div className="resources-card">
+                      <h3 className="resources-card-title">{item.name}</h3>
 
-                      <p
-                        style={{
-                          color: "#3F3F46",
-                          fontSize: "0.85rem",
-                          lineHeight: "1.4",
-                          marginBottom: "8px"
-                        }}
-                      >
-                        {item.desc}
-                      </p>
+                      <p className="resources-card-desc">{item.desc}</p>
 
-                      <div
-                        style={{
-                          fontSize: "0.82rem",
-                          color: section.color,
-                          fontWeight: "600"
-                        }}
-                      >
+                      <div className="resources-card-label">
                         🔗 {item.label}
                       </div>
                     </div>
@@ -274,18 +228,7 @@ function Resources() {
           </section>
         ))}
 
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "8px",
-            padding: "16px",
-            borderRadius: "12px",
-            background: "rgba(123,97,255,0.06)",
-            color: "#5B45D6",
-            fontSize: "0.9rem",
-            fontWeight: "600"
-          }}
-        >
+        <div className="resources-footer-note">
           💜 Reaching out is a sign of strength. You deserve support.
         </div>
       </div>

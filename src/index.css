@@ -497,6 +497,74 @@ a {
   font-weight: 500;
 }
 
+.resources-intro {
+  color: var(--text-light);
+  margin-bottom: 28px;
+}
+
+.resources-section {
+  margin-bottom: 32px;
+}
+
+.resources-section-title {
+  color: var(--card-accent);
+  margin-bottom: 14px;
+  border-bottom: 2px solid color-mix(in srgb, var(--card-accent) 20%, transparent);
+  padding-bottom: 8px;
+  font-size: 1.35rem;
+}
+
+.resources-card-link {
+  text-decoration: none;
+  display: block;
+  height: 100%;
+}
+
+.resources-card {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1.5px solid color-mix(in srgb, var(--card-accent) 20%, transparent);
+  background: color-mix(in srgb, var(--card-accent) 3%, transparent);
+  height: 100%;
+  transition: all 0.18s ease;
+  cursor: pointer;
+}
+
+.resources-card:hover {
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--card-accent) 19%, transparent);
+}
+
+.resources-card-title {
+  font-weight: 700;
+  color: var(--card-accent);
+  margin-bottom: 4px;
+  font-size: 0.97rem;
+}
+
+.resources-card-desc {
+  color: #3f3f46;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.resources-card-label {
+  font-size: 0.82rem;
+  color: var(--card-accent);
+  font-weight: 600;
+}
+
+.resources-footer-note {
+  text-align: center;
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(123, 97, 255, 0.06);
+  color: var(--accessible-purple);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   #root {
     padding: 10px 14px 30px;
