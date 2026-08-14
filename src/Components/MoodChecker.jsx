@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Container, Button, ProgressBar } from "react-bootstrap";
+import { getLastMoodEntry, saveMoodEntry } from "../utils/moodHistory";
 
 const questions = [
   {
@@ -104,6 +105,7 @@ function MoodChecker() {
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   const [current, setCurrent] = useState(0);
   const [done, setDone] = useState(false);
+  const [lastEntry, setLastEntry] = useState(getLastMoodEntry);
 
   const handleSelect = (score) => {
     const updated = [...answers];
@@ -113,6 +115,8 @@ function MoodChecker() {
     if (current < questions.length - 1) {
       setTimeout(() => setCurrent(current + 1), 300);
     } else {
+      const finalTotal = updated.reduce((sum, a) => sum + (a || 0), 0);
+      setLastEntry(saveMoodEntry(getResult(finalTotal)));
       setTimeout(() => setDone(true), 300);
     }
   };
@@ -136,6 +140,22 @@ function MoodChecker() {
           Answer {questions.length} quick questions to check in with your mental
           wellbeing.
         </p>
+
+        {!done && current === 0 && !answers[0] && lastEntry && (
+          <p
+            style={{
+              fontSize: "0.85rem",
+              color: "#5B45D6",
+              background: "rgba(91,69,214,0.08)",
+              borderRadius: "10px",
+              padding: "8px 12px",
+              marginBottom: "16px"
+            }}
+          >
+            {lastEntry.emoji} Last check-in on{" "}
+            {new Date(lastEntry.date).toLocaleDateString()}: {lastEntry.label}
+          </p>
+        )}
 
         <ProgressBar
           now={progress}
