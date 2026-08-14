@@ -50,9 +50,10 @@ const questions = [
   }
 ];
 
+const getPct = (total) => (total / (questions.length * 4)) * 100;
+
 const getResult = (total) => {
-  const max = questions.length * 4;
-  const pct = (total / max) * 100;
+  const pct = getPct(total);
 
   if (pct <= 35) {
     return {
@@ -116,7 +117,7 @@ function MoodChecker() {
       setTimeout(() => setCurrent(current + 1), 300);
     } else {
       const finalTotal = updated.reduce((sum, a) => sum + (a || 0), 0);
-      setLastEntry(saveMoodEntry(getResult(finalTotal)));
+      setLastEntry(saveMoodEntry(getResult(finalTotal), getPct(finalTotal)));
       setTimeout(() => setDone(true), 300);
     }
   };

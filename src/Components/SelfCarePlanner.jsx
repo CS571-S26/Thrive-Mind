@@ -8,52 +8,27 @@ import {
   ProgressBar,
   Row
 } from "react-bootstrap";
-
-const STORAGE_KEY = "thrive_mind_self_care_planner";
-
-const DEFAULT_TASKS = [
-  { id: "water", label: "Drank water", emoji: "💧" },
-  { id: "break", label: "Took a break", emoji: "🌸" },
-  { id: "meal", label: "Ate a meal", emoji: "🍽️" },
-  { id: "outside", label: "Went outside", emoji: "🌤️" },
-  { id: "rest", label: "Got rest", emoji: "🛌" },
-  { id: "note", label: "Listed things you are grateful for", emoji: "😇" },
-  { id: "stretch", label: "Did a gentle stretch", emoji: "🧘" },
-  { id: "music", label: "Listened to something calming", emoji: "🎵" },
-  { id: "friend", label: "Checked in with someone you trust", emoji: "💬" },
-  { id: "screen", label: "Took a short screen break", emoji: "📵" },
-  { id: "breathe", label: "Paused for deep breathing", emoji: "🌬️" },
-  { id: "kindness", label: "Spoke kindly to yourself", emoji: "💖" }
-];
+import {
+  getEntryForDate,
+  getStreak,
+  saveEntryForDate
+} from "../utils/selfCareHistory";
+import { DEFAULT_TASKS } from "../utils/selfCareTasks";
 
 function SelfCarePlanner() {
-  const [checkedItems, setCheckedItems] = useState(() => {
-    const savedItems = localStorage.getItem(STORAGE_KEY);
-
-    if (savedItems) {
-      try {
-        return JSON.parse(savedItems);
-      } catch {
-        return DEFAULT_TASKS.reduce((accumulator, task) => {
-          accumulator[task.id] = false;
-          return accumulator;
-        }, {});
-      }
-    }
-
-    return DEFAULT_TASKS.reduce((accumulator, task) => {
-      accumulator[task.id] = false;
-      return accumulator;
-    }, {});
-  });
+  const [checkedItems, setCheckedItems] = useState(() =>
+    getEntryForDate(DEFAULT_TASKS)
+  );
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedItems));
+    saveEntryForDate(checkedItems);
   }, [checkedItems]);
 
   const completedCount = useMemo(() => {
     return Object.values(checkedItems).filter(Boolean).length;
   }, [checkedItems]);
+
+  const streak = useMemo(() => getStreak(completedCount), [completedCount]);
 
   const progressPercent = useMemo(() => {
     return Math.round((completedCount / DEFAULT_TASKS.length) * 100);
@@ -119,6 +94,12 @@ function SelfCarePlanner() {
               >
                 A gentle checklist for today
               </h2>
+
+              {streak > 0 && (
+                <div className="planner-streak-badge">
+                  🔥 {streak}-day streak
+                </div>
+              )}
             </div>
 
             <Card className="planner-progress-card border-0 mb-4">
