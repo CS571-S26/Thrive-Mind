@@ -14,6 +14,7 @@ import {
   getStreak
 } from "../utils/selfCareHistory";
 import { DEFAULT_TASKS } from "../utils/selfCareTasks";
+import { getRecommendedActions, TYPE_LABELS } from "../utils/recommendations";
 
 const TREND_ARROW = { up: "↗", down: "↘", flat: "→", unknown: "—" };
 
@@ -42,6 +43,7 @@ function Dashboard() {
   const hasAnyData = Boolean(lastEntry) || todaysCompletedCount > 0 || streak > 0;
 
   const focus = getFocusForEntry(lastEntry);
+  const recommendedActions = getRecommendedActions(lastEntry);
 
   return (
     <Container className="mt-4">
@@ -153,21 +155,29 @@ function Dashboard() {
                     </div>
                   )}
 
-                  {lastEntry?.suggestion && (
+                  {recommendedActions.length > 0 && (
                     <div className="dashboard-recommendation">
                       <div className="dashboard-recommendation-label">
-                        Recommended for you
+                        What you could try now
                       </div>
-                      <p style={{ marginBottom: "10px" }}>
-                        {lastEntry.suggestion}
-                      </p>
-                      <Button
-                        as={Link}
-                        to={lastEntry.link || "/resources"}
-                        className="btn-custom"
-                      >
-                        Take me there →
-                      </Button>
+
+                      <div className="dashboard-action-list">
+                        {recommendedActions.map((action) => (
+                          <Link
+                            to={action.link}
+                            className="dashboard-action-row"
+                            key={action.id}
+                          >
+                            <span aria-hidden="true">{action.emoji}</span>
+                            <span className="dashboard-action-text">
+                              <strong>{action.title}</strong>
+                              <span className="dashboard-action-type">
+                                {TYPE_LABELS[action.type]}
+                              </span>
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Container, Button, ProgressBar } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import {
   getLastMoodEntry,
   getShortLabelForEntry,
   saveMoodEntry
 } from "../utils/moodHistory";
+import { getRecommendedActions, TYPE_LABELS } from "../utils/recommendations";
 
 const DISCLAIMER =
   "This check-in is not a diagnostic tool. It's designed to help you reflect on how you're feeling and connect you with the right kind of support.";
@@ -324,16 +326,34 @@ function MoodChecker() {
               )}
             </div>
 
-            <p
-              style={{
-                color: "#5B45D6",
-                fontSize: "0.95rem",
-                marginBottom: "20px",
-                fontWeight: "600"
-              }}
-            >
-              💡 {result.suggestion}
-            </p>
+            <div className="mood-actions">
+              <h3 className="mood-actions-title">
+                Based on your check-in, here's what you could try now
+              </h3>
+
+              <div className="mood-actions-grid">
+                {getRecommendedActions({
+                  id: result.id,
+                  categoryScores,
+                  focusCategory
+                }).map((action) => (
+                  <Link
+                    to={action.link}
+                    className="mood-action-card"
+                    key={action.id}
+                  >
+                    <span className="mood-action-type">
+                      {TYPE_LABELS[action.type]}
+                    </span>
+                    <div className="mood-action-emoji" aria-hidden="true">
+                      {action.emoji}
+                    </div>
+                    <div className="mood-action-title">{action.title}</div>
+                    <p className="mood-action-desc">{action.desc}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
 
             <Button className="btn-custom" onClick={reset}>
               Retake Quiz

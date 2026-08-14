@@ -321,6 +321,78 @@ a {
   color: var(--text-main);
 }
 
+.mood-actions {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.mood-actions-title {
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--accessible-purple);
+  margin-bottom: 14px;
+}
+
+.mood-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.mood-action-card {
+  display: block;
+  text-decoration: none;
+  background: linear-gradient(135deg, #ffffff, #f9f7ff);
+  border: 1.5px solid #d7d4e8;
+  border-radius: 14px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.mood-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(123, 97, 255, 0.12);
+  border-color: var(--accessible-purple);
+}
+
+.mood-action-type {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accessible-purple);
+  background: rgba(123, 97, 255, 0.1);
+  border-radius: 999px;
+  padding: 2px 10px;
+  margin-bottom: 10px;
+}
+
+.mood-action-emoji {
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+}
+
+.mood-action-title {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 0.92rem;
+  margin-bottom: 4px;
+}
+
+.mood-action-desc {
+  color: var(--text-light);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .mood-actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .home-hero {
   text-align: center;
   padding: 48px 24px 40px;
@@ -875,6 +947,46 @@ a {
   font-weight: 700;
   color: var(--accessible-purple);
   margin-bottom: 6px;
+}
+
+.dashboard-action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard-action-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(123, 97, 255, 0.05);
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: background 0.15s ease;
+}
+
+.dashboard-action-row:hover {
+  background: rgba(123, 97, 255, 0.12);
+}
+
+.dashboard-action-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dashboard-action-text strong {
+  color: var(--text-main);
+  font-size: 0.88rem;
+}
+
+.dashboard-action-type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accessible-purple);
 }
 
 .dashboard-snapshot-row {
