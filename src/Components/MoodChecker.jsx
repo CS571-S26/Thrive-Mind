@@ -7,13 +7,16 @@ import {
   saveMoodEntry
 } from "../utils/moodHistory";
 import { getRecommendedActions, TYPE_LABELS } from "../utils/recommendations";
+import {
+  getCategoryScores,
+  getFocusCategory,
+  getPct,
+  getResult
+} from "../utils/moodScoring";
 import Icon from "./Icon";
 
 const DISCLAIMER =
   "This check-in is not a diagnostic tool. It's designed to help you reflect on how you're feeling and connect you with the right kind of support.";
-
-// Display order for the category breakdown, matching how it reads best.
-const CATEGORY_ORDER = ["Mood", "Energy", "Sleep", "Connection", "Stress"];
 
 const questions = [
   {
@@ -68,78 +71,7 @@ const questions = [
   }
 ];
 
-const getPct = (total) => (total / (questions.length * 4)) * 100;
-
-const getResult = (total) => {
-  const pct = getPct(total);
-
-  if (pct <= 35) {
-    return {
-      id: "struggling",
-      label: "You may be having a difficult day",
-      emoji: "💙",
-      color: "#4B5563",
-      message:
-        "Your responses suggest you may benefit from support. Please know that help is available. Consider reaching out to a counselor or calling a helpline — you deserve care.",
-      suggestion: "Visit our Resources page for professional help options.",
-      link: "/resources"
-    };
-  }
-
-  if (pct <= 55) {
-    return {
-      id: "down",
-      label: "Your responses suggest some areas worth paying attention to",
-      emoji: "🌧️",
-      color: "#5B45D6",
-      message:
-        "You're managing, but things feel heavier than usual. Small acts of self-care and connecting with others can help. You don't have to push through alone.",
-      suggestion: "Try our Issues page for specific coping strategies.",
-      link: "/issues"
-    };
-  }
-
-  if (pct <= 75) {
-    return {
-      id: "okay",
-      label: "You seem to be doing okay today, with some ups and downs",
-      emoji: "🌤️",
-      color: "#2C6FB3",
-      message:
-        "You're in a decent place, but there's always room to nurture your wellbeing. Keep checking in with yourself and stay connected to what grounds you.",
-      suggestion: "Explore our mental health resources to stay ahead of stress.",
-      link: "/resources"
-    };
-  }
-
-  return {
-    id: "good",
-    label: "You seem to be doing relatively well today",
-    emoji: "🌟",
-    color: "#1F7A46",
-    message:
-      "You're in a strong place right now — that's great! Keep up the habits that support your wellbeing and remember to be there for others around you too.",
-    suggestion: "Share Thrive Mind with someone who might need it.",
-    link: "/"
-  };
-};
-
-const getCategoryScores = (answers) => {
-  const raw = questions.map((q, i) => ({
-    category: q.category,
-    pct: Math.round(((answers[i] || 0) / 4) * 100)
-  }));
-
-  return CATEGORY_ORDER.map((category) =>
-    raw.find((entry) => entry.category === category)
-  );
-};
-
-const getFocusCategory = (categoryScores) => {
-  return categoryScores.reduce((lowest, entry) =>
-    entry.pct < lowest.pct ? entry : lowest
-  ).category;
-};
+const questionCategories = questions.map((q) => q.category);
 
 function MoodChecker() {
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
@@ -165,13 +97,18 @@ function MoodChecker() {
       setTimeout(() => setCurrent(current + 1), 300);
     } else {
       const finalTotal = updated.reduce((sum, a) => sum + (a || 0), 0);
-      const scores = getCategoryScores(updated);
+      const scores = getCategoryScores(updated, questionCategories);
       const focus = getFocusCategory(scores);
 
       setCategoryScores(scores);
       setFocusCategory(focus);
       setLastEntry(
-        saveMoodEntry(getResult(finalTotal), getPct(finalTotal), scores, focus)
+        saveMoodEntry(
+          getResult(finalTotal, questions.length),
+          getPct(finalTotal, questions.length),
+          scores,
+          focus
+        )
       );
       setTimeout(() => setDone(true), 300);
     }
@@ -187,7 +124,7 @@ function MoodChecker() {
   };
 
   const total = answers.reduce((sum, a) => sum + (a || 0), 0);
-  const result = done ? getResult(total) : null;
+  const result = done ? getResult(total, questions.length) : null;
   const progress = done ? 100 : (current / questions.length) * 100;
 
   return (
