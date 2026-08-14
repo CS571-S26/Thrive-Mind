@@ -224,6 +224,23 @@ a {
   color: #4B3F63 !important;
 }
 
+.crisis-banner {
+  max-width: 1080px;
+  margin: 0 auto 12px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(178, 67, 115, 0.08);
+  border: 1px solid rgba(178, 67, 115, 0.2);
+  color: var(--accessible-pink);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.crisis-banner a {
+  color: var(--accessible-pink);
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   #root {
     padding: 10px 14px 30px;

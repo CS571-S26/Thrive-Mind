@@ -7,11 +7,13 @@ import Resources from "./Components/Resources";
 import SelfCarePlanner from "./Components/SelfCarePlanner"; // new self-care planner page
 import AboutUs from "./Components/AboutUs";
 import NotFound from "./Components/NotFound";
+import CrisisBanner from "./Components/CrisisBanner";
 
 function App() {
   return (
     <>
       <Navbar />
+      <CrisisBanner />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/mood" element={<MoodChecker />} />
