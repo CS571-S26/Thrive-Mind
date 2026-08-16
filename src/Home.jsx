@@ -74,6 +74,7 @@ function Home() {
                 to={path}
                 className="home-need-card fade-in-item"
                 style={{ "--card-accent": color, animationDelay: `${index * 0.06}s` }}
+                aria-label={label}
               >
                 <div className="home-need-emoji" aria-hidden="true">
                   {emoji}

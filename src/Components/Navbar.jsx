@@ -8,11 +8,12 @@ function CustomNavbar() {
   return (
     <Navbar
       expand="lg"
+      variant="dark"
       style={{
-        background: "linear-gradient(90deg, var(--color-lavender), var(--color-primary-light))",
+        background: "linear-gradient(90deg, var(--color-primary-light), var(--color-primary))",
         borderRadius: "14px",
         margin: "10px",
-        boxShadow: "0 4px 14px rgba(67,56,202,0.15)"
+        boxShadow: "0 4px 14px rgba(67,56,202,0.25)"
       }}
     >
       <Container>
@@ -25,7 +26,7 @@ function CustomNavbar() {
             gap: "8px",
             fontWeight: "bold",
             fontSize: "1.2rem",
-            color: "#333"
+            color: "#ffffff"
           }}
         >
           <Icon name="leaf" size={22} />
@@ -51,8 +52,8 @@ function CustomNavbar() {
                   borderRadius: "8px",
                   padding: "6px 14px",
                   fontWeight: location.pathname === path ? "700" : "500",
-                  background: location.pathname === path ? "rgba(255,255,255,0.45)" : "transparent",
-                  color: "#333",
+                  background: location.pathname === path ? "rgba(0,0,0,0.18)" : "transparent",
+                  color: "#ffffff",
                   transition: "background 0.2s"
                 }}
               >

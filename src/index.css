@@ -113,9 +113,9 @@ p {
 }
 
 .btn-custom {
-  background: linear-gradient(135deg, var(--color-lavender), var(--color-primary-light)) !important;
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary)) !important;
   border: none !important;
-  color: #2f2f35 !important;
+  color: #ffffff !important;
   padding: 8px 22px !important;
   border-radius: var(--radius-sm) !important;
   font-weight: 700 !important;
@@ -223,7 +223,7 @@ a {
 }
 
 .planner-progress-bar .progress-bar {
-  background: linear-gradient(90deg, #D95B91, var(--accessible-purple)) !important;
+  background: linear-gradient(90deg, var(--color-pink), var(--accessible-purple)) !important;
   color: #FFFFFF;
   font-weight: 700;
 }
@@ -270,7 +270,7 @@ a {
 }
 
 .planner-primary-btn {
-  background: linear-gradient(90deg, #D95B91, var(--accessible-purple)) !important;
+  background: linear-gradient(90deg, var(--color-pink), var(--accessible-purple)) !important;
   border: none !important;
   color: #FFFFFF !important;
   border-radius: 16px !important;
@@ -705,6 +705,7 @@ a {
 
 .about-team-title {
   color: var(--card-accent);
+  font-size: 1.25rem;
   margin-bottom: 8px;
 }
 
@@ -737,6 +738,7 @@ a {
 
 .about-feature-title {
   color: var(--card-accent);
+  font-size: 1.25rem;
   margin: 0;
 }
 

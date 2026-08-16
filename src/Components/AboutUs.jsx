@@ -160,7 +160,7 @@ function AboutUs() {
                 >
                   <div className="about-team-emoji">{card.emoji}</div>
 
-                  <h5 className="about-team-title">{card.title}</h5>
+                  <h3 className="about-team-title">{card.title}</h3>
 
                   <p className="about-team-text">{card.text}</p>
                 </div>
@@ -182,7 +182,7 @@ function AboutUs() {
                   <div className="about-feature-header">
                     <span className="about-feature-emoji">{feature.emoji}</span>
 
-                    <h5 className="about-feature-title">{feature.title}</h5>
+                    <h3 className="about-feature-title">{feature.title}</h3>
                   </div>
 
                   <p className="about-feature-text">{feature.text}</p>

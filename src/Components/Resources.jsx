@@ -276,6 +276,7 @@ function Resources() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="uw-support-row"
+                aria-label={`${row.need}: ${row.resource} — ${row.desc}`}
               >
                 <span className="uw-support-need">{row.need}</span>
                 <span className="uw-support-resource">

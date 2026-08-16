@@ -206,7 +206,7 @@ function MoodChecker() {
                   style={{
                     background:
                       answers[current] === opt.score
-                        ? "linear-gradient(135deg, var(--color-lavender), var(--color-primary-light))"
+                        ? "linear-gradient(135deg, var(--color-primary-light), var(--color-primary))"
                         : "#f8f7ff",
                     border: "1.5px solid #d7d4e8",
                     borderRadius: "12px",
@@ -214,7 +214,7 @@ function MoodChecker() {
                     textAlign: "left",
                     cursor: "pointer",
                     fontSize: "0.95rem",
-                    color: "#2F2F35",
+                    color: answers[current] === opt.score ? "#ffffff" : "#2F2F35",
                     transition: "all 0.15s ease",
                     fontFamily: "inherit",
                     fontWeight: answers[current] === opt.score ? "700" : "500"
@@ -289,6 +289,7 @@ function MoodChecker() {
                     to={action.link}
                     className="mood-action-card"
                     key={action.id}
+                    aria-label={`${TYPE_LABELS[action.type]}: ${action.title} — ${action.desc}`}
                   >
                     <span className="mood-action-type">
                       {TYPE_LABELS[action.type]}

@@ -182,6 +182,7 @@ function Dashboard() {
                             to={action.link}
                             className="dashboard-action-row"
                             key={action.id}
+                            aria-label={`${TYPE_LABELS[action.type]}: ${action.title}`}
                           >
                             <span aria-hidden="true">{action.emoji}</span>
                             <span className="dashboard-action-text">

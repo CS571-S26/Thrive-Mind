@@ -153,6 +153,7 @@ function Issues() {
                 type="button"
                 onClick={() => setExpanded(expanded === index ? null : index)}
                 aria-expanded={expanded === index}
+                aria-label={`${issue.name} — read more`}
                 style={{
                   width: "100%",
                   textAlign: "left",
@@ -183,7 +184,7 @@ function Issues() {
                     {issue.emoji}
                   </span>
 
-                  <h2
+                  <h3
                     style={{
                       color: issue.color,
                       margin: 0,
@@ -191,7 +192,7 @@ function Issues() {
                     }}
                   >
                     {issue.name}
-                  </h2>
+                  </h3>
                 </div>
 
                 <p style={{ marginBottom: "6px", fontSize: "0.9rem", color: "#3F3F46" }}>
