@@ -110,11 +110,19 @@ Deployment itself is automated with GitHub Actions (`.github/workflows/deploy.ym
 
 ## ♿ Accessibility
 
-Thrive Mind is designed with accessibility in mind: semantic heading structure, ARIA labeling on progress indicators, decorative emoji marked `aria-hidden`, visible focus outlines on every interactive element, and animations that respect `prefers-reduced-motion`. This hasn't yet gone through a full manual audit (keyboard-only walkthrough, screen reader pass, contrast verification) — that's next on the list below.
+Thrive Mind has gone through an actual manual audit, not just accessibility-minded design — here's specifically what was checked and fixed:
+
+- **Color contrast** — every palette pair was computed against WCAG AA (4.5:1 text, 3:1 UI components), not eyeballed. This caught and fixed a real bug: white-on-gradient button and nav text that failed contrast (as low as 1.72:1) against the darker end of the indigo gradient introduced during the visual redesign, and a mobile menu icon that failed the same way. Both are now verified passing at their actual rendered positions.
+- **Heading structure** — audited every page's heading tree for skipped levels. Fixed two real violations: About Us jumped from `h2` straight to `h5` (skipping `h3`/`h4` entirely), and the Issues page had 11 card headings sitting as `h2` siblings instead of nested under their `h2` list label as `h3`.
+- **Accessible names** — checked every interactive element's computed accessible name, not just its visible text. Several card-style links and buttons (Home's routing cards, Issues cards, Mood Quiz recommendation cards, Dashboard action rows, the UW resource table) had no name reliably associated with them; all now carry explicit, concise `aria-label`s.
+- **Keyboard navigation** — tabbed through every page confirming a logical focus order and a visible focus ring (all interactive elements use real `<button>`/`<a>`/`<input>` elements, so keyboard activation is native, not JS-simulated).
+- **Reduced motion** — verified the entrance/bar-growth animations are structured so `prefers-reduced-motion: reduce` disables the animation *and* leaves elements visible (not accidentally stuck at `opacity: 0`).
+
+Not yet done: a pass with an actual screen reader (VoiceOver/NVDA) rather than just computed accessible-name inspection.
 
 ## 🗺️ Possible next steps
 
-- **A full accessibility audit** — actually testing keyboard navigation, screen readers, and color contrast, not just designing for them
+- **A screen reader pass** — testing with VoiceOver or NVDA directly, beyond computed accessible-name inspection
 - **A backend, if there's a real reason for one** — user accounts and cloud-synced history would make the data model meaningfully better, but a wellness app collecting real personal mental-health data carries real privacy and security responsibility. Not worth adding just to look more sophisticated — an anonymous/demo-account model would be the honest way to do it if this grows further.
 
 ## 💬 Contact
