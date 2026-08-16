@@ -1,5 +1,7 @@
 # 🌿 Thrive Mind
 
+[![CI](https://github.com/CS571-S26/Thrive-Mind/actions/workflows/ci.yml/badge.svg)](https://github.com/CS571-S26/Thrive-Mind/actions/workflows/ci.yml)
+
 Thrive Mind is a client-side mental wellness platform built for college students. It combines a non-diagnostic mood check-in, an explainable rule-based recommendation engine, mood history and trend tracking, self-care habit tracking, and curated (and verified) campus support resources in a single accessible interface.
 
 [**Live site**](https://cs571-s26.github.io/Thrive-Mind/) · [Run it locally](#️-run-it-locally) · [Architecture](#-architecture)
@@ -94,7 +96,9 @@ Runs the [Vitest](https://vitest.dev/) suite covering the app's core logic: mood
 npm run build
 ```
 
-This outputs a production build into the `docs/` folder, which is what GitHub Pages serves directly from the `main` branch. Commit and push the rebuilt `docs/` folder to publish changes to the live site.
+Builds a production bundle into the `docs/` folder for local inspection.
+
+Deployment itself is automated with GitHub Actions (`.github/workflows/deploy.yml`): every push to `main` runs lint → test → build, then publishes the result straight to GitHub Pages — no manual build-and-commit step required. A separate `ci.yml` workflow runs the same lint/test/build checks on every branch and pull request, so problems surface before they ever reach `main`.
 
 ## 🧰 Tech stack
 
@@ -110,7 +114,6 @@ Thrive Mind is designed with accessibility in mind: semantic heading structure, 
 
 ## 🗺️ Possible next steps
 
-- **Automated CI/CD** — a GitHub Actions workflow (lint → test → build → deploy) instead of manually rebuilding and committing `docs/`
 - **A full accessibility audit** — actually testing keyboard navigation, screen readers, and color contrast, not just designing for them
 - **A backend, if there's a real reason for one** — user accounts and cloud-synced history would make the data model meaningfully better, but a wellness app collecting real personal mental-health data carries real privacy and security responsibility. Not worth adding just to look more sophisticated — an anonymous/demo-account model would be the honest way to do it if this grows further.
 
