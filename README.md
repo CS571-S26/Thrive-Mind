@@ -20,47 +20,48 @@ Thrive Mind is a client-side mental wellness platform built for college students
 
 This is a static, client-only React app — there's no backend or database. All state lives in the browser and persists via `localStorage`.
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│                            React UI                            │
-│   Home · Mood Quiz · My Wellness · Issues · Resources ·        │
-│                Self-Care Planner · About Us                    │
-└─────────────────────────────┬──────────────────────────────────┘
-                               │  React Router (client-side routing,
-                               │  deep-linkable via query params)
-┌─────────────────────────────┴──────────────────────────────────┐
-│                      Utility / logic layer                      │
-│  moodHistory.js        — mood entries, trend, focus, insights    │
-│  selfCareHistory.js    — dated habit history, streaks, totals    │
-│  recommendations.js    — rule-based recommendation engine        │
-└─────────────────────────────┬──────────────────────────────────┘
-                               │
-                      window.localStorage
+```mermaid
+flowchart TD
+    Router["React Router<br/>client-side routing, deep-linkable via query params"] --> Pages
+
+    subgraph Pages["React UI — pages"]
+        direction LR
+        Home
+        MoodQuiz["Mood Quiz"]
+        Wellness["My Wellness"]
+        Issues
+        Resources
+        Planner["Self-Care Planner"]
+        About["About Us"]
+    end
+
+    Pages --> Utils
+
+    subgraph Utils["Utility / logic layer"]
+        direction LR
+        moodHistory["moodHistory.js<br/>entries, trend, focus, insights"]
+        selfCareHistory["selfCareHistory.js<br/>dated habits, streaks, totals"]
+        moodScoring["moodScoring.js<br/>pure quiz scoring"]
+        recommendations["recommendations.js<br/>rule-based engine"]
+    end
+
+    moodHistory --> Storage[("window.localStorage")]
+    selfCareHistory --> Storage
 ```
 
-Each page component reads/writes through the utility layer rather than touching `localStorage` directly, which is what makes the recommendation engine below reusable in two different UI contexts (Mood Quiz results and the Dashboard) without duplicating logic.
+Each page component reads/writes through the utility layer rather than touching `localStorage` directly. `moodScoring.js` and `recommendations.js` are pure — no storage dependency at all — which is what makes the recommendation engine below reusable in two different UI contexts (Mood Quiz results and the Dashboard) without duplicating logic.
 
 ## 🧠 Explainable, rule-based recommendation engine
 
 The Mood Quiz and Dashboard don't use AI. Recommendations come from a small, fully explainable lookup — every suggestion can be traced back to a specific rule:
 
-```
-question responses
-      │
-      ▼
-category scores  (Mood · Energy · Sleep · Connection · Stress)
-      │
-      ▼
-overall %  →  result tier (struggling · down · okay · good)
-      │
-      ▼
-lowest-scoring category  →  "focus" category
-      │
-      ▼
-rule-based action selection  (reset · reconnect · learn · get support)
-      │
-      ▼
-3 recommended actions, each linking to a real page in the app
+```mermaid
+flowchart TD
+    A["Question responses"] --> B["Category scores<br/>Mood · Energy · Sleep · Connection · Stress"]
+    B --> C["Overall % → result tier<br/>struggling · down · okay · good"]
+    C --> D["Lowest-scoring category → 'focus' category"]
+    D --> E["Rule-based action selection<br/>reset · reconnect · learn · get support"]
+    E --> F["3 recommended actions,<br/>each linking to a real page in the app"]
 ```
 
 For example: a check-in scoring Stress 25%, Sleep 50%, Connection 75% sets **Stress** as the focus category, which maps to a stress-management reading suggestion; a Connection score above 60% skips the "reach out to someone" nudge (no point suggesting it to someone already well-connected); and a "down" result tier adds a campus-counselor suggestion as the closing action. The code comments on this intentionally: `recommendations.js` describes itself as "a small, fully rule-based recommendation engine — no AI, just an explainable lookup," and `moodHistory.js`'s pattern-detection helper is documented as "a simple, explainable, rule-based nudge — not a diagnosis, just a pattern flag."
