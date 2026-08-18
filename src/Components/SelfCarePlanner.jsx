@@ -139,12 +139,13 @@ function SelfCarePlanner() {
 </span>
                 </div>
 
-                <ProgressBar
-                  now={progressPercent}
-                  label={`${progressPercent}%`}
-                  className="planner-progress-bar"
-                  aria-label={`Self-care planner progress is ${progressPercent} percent`}
-                />
+                <ProgressBar className="planner-progress-bar">
+                  <ProgressBar
+                    now={progressPercent}
+                    label={`${progressPercent}%`}
+                    aria-label={`Self-care planner progress is ${progressPercent} percent`}
+                  />
+                </ProgressBar>
 
                 <p className="planner-encouragement mt-3 mb-0">
                   {progressMessage}

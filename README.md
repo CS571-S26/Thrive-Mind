@@ -88,7 +88,7 @@ This starts a local dev server (Vite) with hot reload, printed in your terminal 
 npm test
 ```
 
-Runs the [Vitest](https://vitest.dev/) suite covering the app's core logic: mood scoring and category breakdown, the recommendation engine's rule selection, trend and streak calculation, and dashboard empty-state handling.
+Runs the [Vitest](https://vitest.dev/) suite covering the app's core logic (mood scoring and category breakdown, the recommendation engine's rule selection, trend and streak calculation, dashboard empty-state handling) plus an automated accessibility check on every page using [axe-core](https://github.com/dequelabs/axe-core) — the same rules engine used by most browser accessibility devtools.
 
 ## 📦 Build & deploy
 
@@ -105,7 +105,7 @@ Deployment itself is automated with GitHub Actions (`.github/workflows/deploy.ym
 - [React](https://react.dev/) + [React Router](https://reactrouter.com/) for the UI and page navigation
 - [React Bootstrap](https://react-bootstrap.github.io/) for components and layout
 - [Vite](https://vite.dev/) for local dev and production builds
-- [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react) for testing
+- [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react) + [axe-core](https://github.com/dequelabs/axe-core) for testing
 - `localStorage` as the persistence layer — no backend, no database
 
 ## ♿ Accessibility
@@ -117,8 +117,9 @@ Thrive Mind has gone through an actual manual audit, not just accessibility-mind
 - **Accessible names** — checked every interactive element's computed accessible name, not just its visible text. Several card-style links and buttons (Home's routing cards, Issues cards, Mood Quiz recommendation cards, Dashboard action rows, the UW resource table) had no name reliably associated with them; all now carry explicit, concise `aria-label`s.
 - **Keyboard navigation** — tabbed through every page confirming a logical focus order and a visible focus ring (all interactive elements use real `<button>`/`<a>`/`<input>` elements, so keyboard activation is native, not JS-simulated).
 - **Reduced motion** — verified the entrance/bar-growth animations are structured so `prefers-reduced-motion: reduce` disables the animation *and* leaves elements visible (not accidentally stuck at `opacity: 0`).
+- **Automated regression coverage** — every page now runs through [axe-core](https://github.com/dequelabs/axe-core) in the test suite (`npm test`), so future changes can't silently reintroduce these issues. This is genuinely how the audit caught its most interesting bug: React Bootstrap's `<ProgressBar>` puts a custom `aria-label` prop on the wrong DOM node in its default usage — the label lands on the outer, role-less wrapper `<div>` instead of the inner `role="progressbar"` element, leaving the actual progress bar with no accessible name at all. Fixed by using React Bootstrap's nested composite `<ProgressBar>` API instead, which forwards custom props to the right element.
 
-Not yet done: a pass with an actual screen reader (VoiceOver/NVDA) rather than just computed accessible-name inspection.
+Not yet done: a pass with an actual screen reader (VoiceOver/NVDA). axe-core catches a large, well-defined class of issues (missing labels, ARIA misuse, contrast, heading structure) but isn't a substitute for hearing how a page actually reads.
 
 ## 🗺️ Possible next steps
 

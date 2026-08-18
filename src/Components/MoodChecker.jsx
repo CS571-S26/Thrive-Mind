@@ -159,15 +159,18 @@ function MoodChecker() {
         )}
 
         <ProgressBar
-          now={progress}
           style={{
             height: "8px",
             borderRadius: "8px",
             marginBottom: "24px"
           }}
-          variant={done ? "success" : "info"}
-          aria-label={`Mood quiz progress is ${Math.round(progress)} percent`}
-        />
+        >
+          <ProgressBar
+            now={progress}
+            variant={done ? "success" : "info"}
+            aria-label={`Mood quiz progress is ${Math.round(progress)} percent`}
+          />
+        </ProgressBar>
 
         {!done ? (
           <div>
