@@ -24,6 +24,14 @@ describe("getRecommendedActions", () => {
     expect(actions).toHaveLength(3);
   });
 
+  it("gives every action an explanatory reason", () => {
+    const actions = getRecommendedActions(buildEntry());
+    actions.forEach((action) => {
+      expect(typeof action.reason).toBe("string");
+      expect(action.reason.length).toBeGreaterThan(0);
+    });
+  });
+
   it("addresses the lowest-scoring category first", () => {
     const entry = buildEntry({
       focusCategory: "Sleep",

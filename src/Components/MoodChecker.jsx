@@ -73,9 +73,35 @@ const questions = [
 
 const questionCategories = questions.map((q) => q.category);
 
+const PROGRESS_KEY = "thrive_mind_mood_quiz_progress";
+
+function getSavedProgress() {
+  try {
+    const raw = sessionStorage.getItem(PROGRESS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (
+      Array.isArray(parsed.answers) &&
+      parsed.answers.length === questions.length &&
+      typeof parsed.current === "number"
+    ) {
+      return parsed;
+    }
+  } catch {
+    // ignore corrupt/unavailable storage
+  }
+  return null;
+}
+
 function MoodChecker() {
-  const [answers, setAnswers] = useState(Array(questions.length).fill(null));
-  const [current, setCurrent] = useState(0);
+  const [answers, setAnswers] = useState(
+    () => getSavedProgress()?.answers ?? Array(questions.length).fill(null)
+  );
+  const [current, setCurrent] = useState(() => {
+    const saved = getSavedProgress();
+    if (!saved) return 0;
+    return Math.min(Math.max(saved.current, 0), questions.length - 1);
+  });
   const [done, setDone] = useState(false);
   const [lastEntry, setLastEntry] = useState(getLastMoodEntry);
   const [categoryScores, setCategoryScores] = useState([]);
@@ -87,6 +113,21 @@ function MoodChecker() {
     const frame = requestAnimationFrame(() => setBarsVisible(true));
     return () => cancelAnimationFrame(frame);
   }, [done]);
+
+  useEffect(() => {
+    // Nothing to resume once every question is answered — completion (and
+    // the results screen) is one render away regardless of whether `done`
+    // has flipped true yet, so this can't wait on `done` to clear.
+    const noProgressToSave =
+      done || answers.every((a) => a === null) || answers.every((a) => a !== null);
+
+    if (noProgressToSave) {
+      sessionStorage.removeItem(PROGRESS_KEY);
+      return;
+    }
+
+    sessionStorage.setItem(PROGRESS_KEY, JSON.stringify({ answers, current }));
+  }, [answers, current, done]);
 
   const handleSelect = (score) => {
     const updated = [...answers];
@@ -112,6 +153,10 @@ function MoodChecker() {
       );
       setTimeout(() => setDone(true), 300);
     }
+  };
+
+  const goBack = () => {
+    if (current > 0) setCurrent(current - 1);
   };
 
   const reset = () => {
@@ -174,15 +219,37 @@ function MoodChecker() {
 
         {!done ? (
           <div>
-            <p
+            <div
               style={{
-                fontSize: "0.85rem",
-                color: "#4B5563",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
                 marginBottom: "6px"
               }}
             >
-              Question {current + 1} of {questions.length}
-            </p>
+              <p style={{ fontSize: "0.85rem", color: "#4B5563", margin: 0 }}>
+                Question {current + 1} of {questions.length}
+              </p>
+
+              {current > 0 && (
+                <button
+                  type="button"
+                  onClick={goBack}
+                  aria-label="Go back to the previous question"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--color-primary)",
+                    fontSize: "0.85rem",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                    padding: "4px 6px"
+                  }}
+                >
+                  ← Back
+                </button>
+              )}
+            </div>
 
             <h2
               style={{
@@ -292,7 +359,9 @@ function MoodChecker() {
                     to={action.link}
                     className="mood-action-card"
                     key={action.id}
-                    aria-label={`${TYPE_LABELS[action.type]}: ${action.title} — ${action.desc}`}
+                    aria-label={`${TYPE_LABELS[action.type]}: ${action.title} — ${action.desc}${
+                      action.reason ? ` Why: ${action.reason}` : ""
+                    }`}
                   >
                     <span className="mood-action-type">
                       {TYPE_LABELS[action.type]}
@@ -302,6 +371,9 @@ function MoodChecker() {
                     </div>
                     <div className="mood-action-title">{action.title}</div>
                     <p className="mood-action-desc">{action.desc}</p>
+                    {action.reason && (
+                      <p className="mood-action-reason">Why: {action.reason}</p>
+                    )}
                   </Link>
                 ))}
               </div>

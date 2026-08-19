@@ -9,7 +9,9 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const answerQuiz = async (scores) => {
   for (const score of scores) {
-    const buttons = screen.getAllByRole("button");
+    const buttons = screen
+      .getAllByRole("button")
+      .filter((btn) => !/back/i.test(btn.textContent));
     fireEvent.click(buttons[score - 1]);
     await act(async () => {
       await wait(350);
@@ -19,6 +21,7 @@ const answerQuiz = async (scores) => {
 
 beforeEach(() => {
   localStorage.clear();
+  sessionStorage.clear();
 });
 
 describe("MoodChecker accessibility", () => {

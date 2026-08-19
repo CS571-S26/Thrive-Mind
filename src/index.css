@@ -452,6 +452,14 @@ a {
   margin-bottom: 0;
 }
 
+.mood-action-reason {
+  color: var(--accessible-purple);
+  font-size: 0.75rem;
+  font-style: italic;
+  line-height: 1.4;
+  margin: 8px 0 0;
+}
+
 @media (max-width: 640px) {
   .mood-actions-grid {
     grid-template-columns: 1fr;

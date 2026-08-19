@@ -104,7 +104,14 @@ const FOCUS_ACTION_BY_CATEGORY = {
   Connection: "reconnectText"
 };
 
-const withKey = (key) => ({ id: key, ...ACTIONS[key] });
+const withKey = (key, reason) => ({ id: key, ...ACTIONS[key], reason });
+
+const RESULT_TIER_REASON = {
+  struggling: "Your check-in showed you might be struggling right now.",
+  down: "Your check-in suggested extra support could help.",
+  okay: "You're doing okay overall — a good moment to check your trends.",
+  good: "You're doing well today."
+};
 
 // entry: { id: resultId, categoryScores, focusCategory, suggestion, link }
 export const getRecommendedActions = (entry) => {
@@ -130,14 +137,19 @@ export const getRecommendedActions = (entry) => {
   const used = new Set();
   const actions = [];
 
-  const add = (key) => {
+  const add = (key, reason) => {
     if (used.has(key)) return;
     used.add(key);
-    actions.push(withKey(key));
+    actions.push(withKey(key, reason));
   };
 
   // 1. Address the single lowest-scoring category first.
-  add(FOCUS_ACTION_BY_CATEGORY[focusCategory] || "planner");
+  add(
+    FOCUS_ACTION_BY_CATEGORY[focusCategory] || "planner",
+    focusCategory
+      ? `${focusCategory} was your lowest-scoring area today.`
+      : "A small self-care win can help across the board."
+  );
 
   // 2. Social connection matters broadly; only skip it if it's already
   // strong, or already covered by step 1.
@@ -145,21 +157,31 @@ export const getRecommendedActions = (entry) => {
     categoryScores.find((c) => c.category === "Connection")?.pct ?? 100;
 
   if (connectionScore < 60) {
-    add(focusCategory === "Connection" ? "reconnectGroup" : "reconnectText");
+    if (focusCategory === "Connection") {
+      add(
+        "reconnectGroup",
+        "Connection was your focus area — group support offers another way in."
+      );
+    } else {
+      add("reconnectText", "Your Connection score was low today too.");
+    }
   } else {
     const secondLowest = [...categoryScores]
       .filter((c) => c.category !== focusCategory)
       .sort((a, b) => a.pct - b.pct)[0];
 
-    if (secondLowest?.category === "Stress") add("learnAcademic");
-    else add("planner");
+    if (secondLowest?.category === "Stress") {
+      add("learnAcademic", "Stress was your next-lowest area.");
+    } else {
+      add("planner", "A few small wins across the board can help.");
+    }
   }
 
   // 3. A closing action based on the overall result tier.
-  if (resultId === "struggling") add("supportCrisis");
-  else if (resultId === "down") add("supportCounselor");
-  else if (resultId === "okay") add("wellnessTrends");
-  else add("shareThrive");
+  if (resultId === "struggling") add("supportCrisis", RESULT_TIER_REASON.struggling);
+  else if (resultId === "down") add("supportCounselor", RESULT_TIER_REASON.down);
+  else if (resultId === "okay") add("wellnessTrends", RESULT_TIER_REASON.okay);
+  else add("shareThrive", RESULT_TIER_REASON.good);
 
   return actions.slice(0, 3);
 };
