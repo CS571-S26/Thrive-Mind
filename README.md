@@ -120,7 +120,7 @@ Thrive Mind has gone through an actual manual audit, not just accessibility-mind
 - **Reduced motion** — verified the entrance/bar-growth animations are structured so `prefers-reduced-motion: reduce` disables the animation *and* leaves elements visible (not accidentally stuck at `opacity: 0`).
 - **Automated regression coverage** — every page now runs through [axe-core](https://github.com/dequelabs/axe-core) in the test suite (`npm test`), so future changes can't silently reintroduce these issues. This is genuinely how the audit caught its most interesting bug: React Bootstrap's `<ProgressBar>` puts a custom `aria-label` prop on the wrong DOM node in its default usage — the label lands on the outer, role-less wrapper `<div>` instead of the inner `role="progressbar"` element, leaving the actual progress bar with no accessible name at all. Fixed by using React Bootstrap's nested composite `<ProgressBar>` API instead, which forwards custom props to the right element.
 
-Not yet done: a pass with an actual screen reader (VoiceOver/NVDA). axe-core catches a large, well-defined class of issues (missing labels, ARIA misuse, contrast, heading structure) but isn't a substitute for hearing how a page actually reads.
+Not yet done: a pass with an actual screen reader (VoiceOver/NVDA). axe-core catches a large, well-defined class of issues (missing labels, ARIA misuse, contrast, heading structure) but isn't a substitute for hearing how a page actually reads. A step-by-step manual testing checklist is in [ACCESSIBILITY_TESTING.md](ACCESSIBILITY_TESTING.md).
 
 ## 🗺️ Possible next steps
 
