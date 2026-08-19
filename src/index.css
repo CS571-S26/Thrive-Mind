@@ -828,9 +828,32 @@ a {
   font-weight: 600;
 }
 
-.uw-support-title {
-  color: #c5050c;
-  border-bottom-color: rgba(197, 5, 12, 0.2) !important;
+.resources-tabs {
+  border-bottom: 2px solid rgba(67, 56, 202, 0.12);
+  margin-bottom: 24px;
+  gap: 4px;
+}
+
+.resources-tabs .nav-link {
+  color: var(--text-light);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  padding: 10px 6px;
+  margin-right: 20px;
+}
+
+.resources-tabs .nav-link:hover {
+  color: var(--accessible-purple);
+  border-color: transparent;
+}
+
+.resources-tabs .nav-link.active {
+  color: var(--accessible-purple);
+  background: transparent;
+  border-bottom-color: var(--accessible-purple);
 }
 
 .uw-support-subtitle {

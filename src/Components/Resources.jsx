@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Row, Col, Tabs, Tab } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import Icon from "./Icon";
 
@@ -227,12 +227,23 @@ const sections = [
   }
 ];
 
+const generalSectionIds = sections.map((section) => section.id);
+
 function Resources() {
   const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(() =>
+    generalSectionIds.includes(searchParams.get("section")) ? "general" : "uw"
+  );
 
   useEffect(() => {
     const target = searchParams.get("section");
     if (!target) return;
+
+    if (generalSectionIds.includes(target)) {
+      setActiveTab("general");
+    } else if (target === "uw-madison-support") {
+      setActiveTab("uw");
+    }
 
     const frame = requestAnimationFrame(() => {
       document.getElementById(target)?.scrollIntoView({
@@ -257,71 +268,77 @@ function Resources() {
           right support — from crisis lines to therapists, apps, and more.
         </p>
 
-        <section id="uw-madison-support" className="resources-section">
-          <h2 className="resources-section-title uw-support-title">
-            🎓 UW–Madison Support
-          </h2>
+        <Tabs
+          activeKey={activeTab}
+          onSelect={(key) => setActiveTab(key ?? "uw")}
+          className="resources-tabs"
+        >
+          <Tab eventKey="uw" title="🎓 UW–Madison Support">
+            <section id="uw-madison-support" className="resources-section">
+              <p className="uw-support-subtitle">
+                Thrive Mind was built for UW–Madison students. These are the
+                university's own mental health services, verified directly
+                against uhs.wisc.edu.
+              </p>
 
-          <p className="uw-support-subtitle">
-            Thrive Mind was built for UW–Madison students. These are the
-            university's own mental health services, verified directly
-            against uhs.wisc.edu.
-          </p>
-
-          <div className="uw-support-table">
-            {uwSupportRows.map((row) => (
-              <a
-                key={row.need}
-                href={row.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="uw-support-row"
-                aria-label={`${row.need}: ${row.resource} — ${row.desc}`}
-              >
-                <span className="uw-support-need">{row.need}</span>
-                <span className="uw-support-resource">
-                  <strong>{row.resource}</strong>
-                  <span className="uw-support-desc">{row.desc}</span>
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {sections.map((section, si) => (
-          <section
-            key={si}
-            id={section.id}
-            className="resources-section"
-            style={{ "--card-accent": section.color }}
-          >
-            <h2 className="resources-section-title">{section.title}</h2>
-
-            <Row className="g-3">
-              {section.items.map((item, ii) => (
-                <Col key={ii} md={6}>
+              <div className="uw-support-table">
+                {uwSupportRows.map((row) => (
                   <a
-                    href={item.link}
+                    key={row.need}
+                    href={row.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="resources-card-link"
-                    aria-label={`${item.name}: ${item.desc}`}
+                    className="uw-support-row"
+                    aria-label={`${row.need}: ${row.resource} — ${row.desc}`}
                   >
-                    <div className="resources-card">
-                      <h3 className="resources-card-title">{item.name}</h3>
-
-                      <p className="resources-card-desc">{item.desc}</p>
-
-                      <div className="resources-card-label">
-                        🔗 {item.label}
-                      </div>
-                    </div>
+                    <span className="uw-support-need">{row.need}</span>
+                    <span className="uw-support-resource">
+                      <strong>{row.resource}</strong>
+                      <span className="uw-support-desc">{row.desc}</span>
+                    </span>
                   </a>
-                </Col>
-              ))}
-            </Row>
-          </section>
-        ))}
+                ))}
+              </div>
+            </section>
+          </Tab>
+
+          <Tab eventKey="general" title="🌐 National & Online Resources">
+            {sections.map((section, si) => (
+              <section
+                key={si}
+                id={section.id}
+                className="resources-section"
+                style={{ "--card-accent": section.color }}
+              >
+                <h2 className="resources-section-title">{section.title}</h2>
+
+                <Row className="g-3">
+                  {section.items.map((item, ii) => (
+                    <Col key={ii} md={6}>
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="resources-card-link"
+                        aria-label={`${item.name}: ${item.desc}`}
+                      >
+                        <div className="resources-card">
+                          <h3 className="resources-card-title">{item.name}</h3>
+
+                          <p className="resources-card-desc">{item.desc}</p>
+
+                          <div className="resources-card-label">
+                            🔗 {item.label}
+                          </div>
+                        </div>
+                      </a>
+                    </Col>
+                  ))}
+                </Row>
+              </section>
+            ))}
+          </Tab>
+        </Tabs>
 
         <div className="resources-footer-note">
           💜 Reaching out is a sign of strength. You deserve support.
