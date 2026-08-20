@@ -4,7 +4,28 @@
 
 Thrive Mind is a client-side mental wellness platform built for college students. It combines a non-diagnostic mood check-in, an explainable rule-based recommendation engine, mood history and trend tracking, self-care habit tracking, and curated (and verified) campus support resources in a single accessible interface.
 
-[**Live site**](https://cs571-s26.github.io/Thrive-Mind/) · [Run it locally](#️-run-it-locally) · [Architecture](#-architecture)
+[**Live Demo**](https://cs571-s26.github.io/Thrive-Mind/) · [**GitHub**](https://github.com/CS571-S26/Thrive-Mind) · [**Demo Video**](#-demo) · [Run it locally](#️-run-it-locally) · [Architecture](#-architecture)
+
+## 🎬 Demo
+
+![Thrive Mind walkthrough — home, mood quiz, recommendations, dashboard, and resources](assets/demo.gif)
+
+## 📸 Screenshots
+
+**Home** — needs-based routing straight to the relevant help
+![Home page](assets/screenshots/01-home.png)
+
+**Mood Quiz** — a 5-category, non-diagnostic check-in
+![Mood Quiz](assets/screenshots/02-mood-quiz.png)
+
+**Recommendation results** — every suggestion explains the specific reason it was picked
+![Recommendation results](assets/screenshots/03-recommendations.png)
+
+**Wellness dashboard** — mood trend, self-care streak, and check-in history at a glance
+![Wellness dashboard](assets/screenshots/04-dashboard.png)
+
+**Resources** — verified UW–Madison support alongside national resources
+![Resources page](assets/screenshots/05-resources.png)
 
 ## ✨ Features
 
