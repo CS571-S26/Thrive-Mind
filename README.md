@@ -1,4 +1,4 @@
-# 🌿 Thrive Mind
+# Thrive Mind
 
 [![CI](https://github.com/CS571-S26/Thrive-Mind/actions/workflows/ci.yml/badge.svg)](https://github.com/CS571-S26/Thrive-Mind/actions/workflows/ci.yml)
 
@@ -16,7 +16,7 @@ Thrive Mind is a client-side mental wellness platform built for college students
 - **Self-Care Planner** — track small daily wellness habits, with a streak and monthly total
 - **About Us** — who built Thrive Mind, why, and how to reach us
 
-## 🧭 Architecture
+## Architecture
 
 This is a static, client-only React app — there's no backend or database. All state lives in the browser and persists via `localStorage`.
 
@@ -72,7 +72,7 @@ Thrive Mind is deployed with GitHub Pages: **https://cs571-s26.github.io/Thrive-
 
 No installation needed — just open the link in a browser.
 
-## 🛠️ Run it locally
+##  Run it locally
 
 ```bash
 git clone git@github.com:CS571-S26/Thrive-Mind.git
@@ -101,7 +101,7 @@ Builds a production bundle into the `docs/` folder for local inspection.
 
 Deployment itself is automated with GitHub Actions (`.github/workflows/deploy.yml`): every push to `main` runs lint → test → build, then publishes the result straight to GitHub Pages — no manual build-and-commit step required. A separate `ci.yml` workflow runs the same lint/test/build checks on every branch and pull request, so problems surface before they ever reach `main`.
 
-## 🧰 Tech stack
+##  Tech stack
 
 - [React](https://react.dev/) + [React Router](https://reactrouter.com/) for the UI and page navigation
 - [React Bootstrap](https://react-bootstrap.github.io/) for components and layout
@@ -120,12 +120,6 @@ Thrive Mind has gone through an actual manual audit, not just accessibility-mind
 - **Reduced motion** — verified the entrance/bar-growth animations are structured so `prefers-reduced-motion: reduce` disables the animation *and* leaves elements visible (not accidentally stuck at `opacity: 0`).
 - **Automated regression coverage** — every page now runs through [axe-core](https://github.com/dequelabs/axe-core) in the test suite (`npm test`), so future changes can't silently reintroduce these issues. This is genuinely how the audit caught its most interesting bug: React Bootstrap's `<ProgressBar>` puts a custom `aria-label` prop on the wrong DOM node in its default usage — the label lands on the outer, role-less wrapper `<div>` instead of the inner `role="progressbar"` element, leaving the actual progress bar with no accessible name at all. Fixed by using React Bootstrap's nested composite `<ProgressBar>` API instead, which forwards custom props to the right element.
 
-Not yet done: a pass with an actual screen reader (VoiceOver/NVDA). axe-core catches a large, well-defined class of issues (missing labels, ARIA misuse, contrast, heading structure) but isn't a substitute for hearing how a page actually reads. A step-by-step manual testing checklist is in [ACCESSIBILITY_TESTING.md](ACCESSIBILITY_TESTING.md).
-
-## 🗺️ Possible next steps
-
-- **A screen reader pass** — testing with VoiceOver or NVDA directly, beyond computed accessible-name inspection
-- **A backend, if there's a real reason for one** — user accounts and cloud-synced history would make the data model meaningfully better, but a wellness app collecting real personal mental-health data carries real privacy and security responsibility. Not worth adding just to look more sophisticated — an anonymous/demo-account model would be the honest way to do it if this grows further.
 
 ## 💬 Contact
 
