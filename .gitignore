@@ -3,3 +3,5 @@ dist/
 docs/
 .vite/
 .DS_Store
+.env
+server/generated/
