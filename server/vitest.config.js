@@ -11,6 +11,12 @@ export default defineConfig({
       DATABASE_URL: `postgresql://${process.env.USER}@localhost:5432/thrivemind_test?host=/tmp`,
       SESSION_SECRET: "test-secret"
     },
-    setupFiles: "./src/__tests__/setup.js"
+    setupFiles: "./src/__tests__/setup.js",
+    // Test files share one physical Postgres database (no per-file
+    // isolation), and each file's afterEach does a global
+    // prisma.user.deleteMany(). Running files in parallel let one file's
+    // cleanup delete users a concurrently-running file had just created,
+    // causing intermittent foreign-key failures. Serialize instead.
+    fileParallelism: false
   }
 });
