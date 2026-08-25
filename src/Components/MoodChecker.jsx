@@ -13,6 +13,8 @@ import {
   getPct,
   getResult
 } from "../utils/moodScoring";
+import { fetchMoodEntries, createMoodEntry } from "../api/moodEntries.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon";
 
 const DISCLAIMER =
@@ -94,6 +96,7 @@ function getSavedProgress() {
 }
 
 function MoodChecker() {
+  const { user } = useAuth();
   const [answers, setAnswers] = useState(
     () => getSavedProgress()?.answers ?? Array(questions.length).fill(null)
   );
@@ -113,6 +116,21 @@ function MoodChecker() {
     const frame = requestAnimationFrame(() => setBarsVisible(true));
     return () => cancelAnimationFrame(frame);
   }, [done]);
+
+  // Signed-in users' history lives on the server, not localStorage — refresh
+  // the "last check-in" banner from there once we know who's signed in.
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+
+    fetchMoodEntries(1).then((entries) => {
+      if (!cancelled && entries[0]) setLastEntry(entries[0]);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
   useEffect(() => {
     // Nothing to resume once every question is answered — completion (and
@@ -140,17 +158,33 @@ function MoodChecker() {
       const finalTotal = updated.reduce((sum, a) => sum + (a || 0), 0);
       const scores = getCategoryScores(updated, questionCategories);
       const focus = getFocusCategory(scores);
+      const finalResult = getResult(finalTotal, questions.length);
+      const finalPct = getPct(finalTotal, questions.length);
 
       setCategoryScores(scores);
       setFocusCategory(focus);
-      setLastEntry(
-        saveMoodEntry(
-          getResult(finalTotal, questions.length),
-          getPct(finalTotal, questions.length),
-          scores,
-          focus
-        )
-      );
+
+      if (user) {
+        // Best-effort: the quiz result is already computed and shown locally
+        // (moodScoring.js is pure), so a slow or failed save shouldn't block
+        // or break the results screen — it just means this check-in won't
+        // show up in the synced history.
+        createMoodEntry({
+          resultId: finalResult.id,
+          label: finalResult.label,
+          emoji: finalResult.emoji,
+          pct: finalPct,
+          suggestion: finalResult.suggestion,
+          link: finalResult.link,
+          categoryScores: scores,
+          focusCategory: focus
+        })
+          .then(setLastEntry)
+          .catch(() => {});
+      } else {
+        setLastEntry(saveMoodEntry(finalResult, finalPct, scores, focus));
+      }
+
       setTimeout(() => setDone(true), 300);
     }
   };
