@@ -9,27 +9,70 @@ import {
   Row
 } from "react-bootstrap";
 import {
+  getDateKey,
   getEntryForDate,
+  getEntryForDateFrom,
   getStreak,
+  getStreakFrom,
   saveEntryForDate
 } from "../utils/selfCareHistory";
 import { DEFAULT_TASKS } from "../utils/selfCareTasks";
+import { fetchSelfCareDays, putSelfCareDay } from "../api/selfCareDays.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon";
 
 function SelfCarePlanner() {
+  const { user } = useAuth();
   const [checkedItems, setCheckedItems] = useState(() =>
     getEntryForDate(DEFAULT_TASKS)
   );
+  const [remoteHistory, setRemoteHistory] = useState(null);
 
+  // Signed-in users' checklist lives on the server, not localStorage. Fetch
+  // it once we know who's signed in, and use it to seed today's checkboxes.
+  // (remoteHistory is only ever read when `user` is set, so there's no need
+  // to clear it out on sign-out.)
   useEffect(() => {
+    if (!user) return;
+
+    let cancelled = false;
+    fetchSelfCareDays(90).then((history) => {
+      if (cancelled) return;
+      setRemoteHistory(history);
+      setCheckedItems(getEntryForDateFrom(history, DEFAULT_TASKS));
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  // Reactively syncs whichever backend applies on every checkedItems change
+  // (toggle, reset, or complete-all) — same pattern regardless of how the
+  // change happened. Best-effort for the API path: today's checklist is
+  // already updated locally, so a failed sync just means this change won't
+  // show up in the synced history yet.
+  useEffect(() => {
+    if (user) {
+      const dateKey = getDateKey();
+      putSelfCareDay(dateKey, checkedItems)
+        .then(() =>
+          setRemoteHistory((prev) => ({ ...(prev ?? {}), [dateKey]: checkedItems }))
+        )
+        .catch(() => {});
+      return;
+    }
     saveEntryForDate(checkedItems);
-  }, [checkedItems]);
+  }, [checkedItems, user]);
 
   const completedCount = useMemo(() => {
     return Object.values(checkedItems).filter(Boolean).length;
   }, [checkedItems]);
 
-  const streak = useMemo(() => getStreak(completedCount), [completedCount]);
+  const streak = useMemo(() => {
+    if (!user) return getStreak(completedCount);
+    return getStreakFrom(remoteHistory ?? {}, completedCount);
+  }, [user, remoteHistory, completedCount]);
 
   const progressPercent = useMemo(() => {
     return Math.round((completedCount / DEFAULT_TASKS.length) * 100);
