@@ -3,6 +3,7 @@ import { act } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import MoodChecker from "./MoodChecker";
+import { AuthProvider } from "../context/AuthContext.jsx";
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -25,7 +26,9 @@ const answerQuiz = async (scores) => {
 const renderQuiz = () =>
   render(
     <MemoryRouter>
-      <MoodChecker />
+      <AuthProvider>
+        <MoodChecker />
+      </AuthProvider>
     </MemoryRouter>
   );
 

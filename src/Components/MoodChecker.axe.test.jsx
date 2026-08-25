@@ -3,6 +3,7 @@ import { act } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import MoodChecker from "./MoodChecker";
+import { AuthProvider } from "../context/AuthContext.jsx";
 import { runAxe } from "../test/axeHelper";
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -28,7 +29,9 @@ describe("MoodChecker accessibility", () => {
   it("has no axe violations on the question screen", async () => {
     const { container } = render(
       <MemoryRouter>
-        <MoodChecker />
+        <AuthProvider>
+          <MoodChecker />
+        </AuthProvider>
       </MemoryRouter>
     );
 
@@ -38,7 +41,9 @@ describe("MoodChecker accessibility", () => {
   it("has no axe violations on the results screen", async () => {
     const { container } = render(
       <MemoryRouter>
-        <MoodChecker />
+        <AuthProvider>
+          <MoodChecker />
+        </AuthProvider>
       </MemoryRouter>
     );
 

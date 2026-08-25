@@ -4,12 +4,15 @@ import { MemoryRouter } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import { saveMoodEntry } from "../utils/moodHistory";
 import { saveEntryForDate } from "../utils/selfCareHistory";
+import { AuthProvider } from "../context/AuthContext.jsx";
 import { runAxe } from "../test/axeHelper";
 
 const renderDashboard = () =>
   render(
     <MemoryRouter>
-      <Dashboard />
+      <AuthProvider>
+        <Dashboard />
+      </AuthProvider>
     </MemoryRouter>
   );
 

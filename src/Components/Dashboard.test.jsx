@@ -4,11 +4,14 @@ import { MemoryRouter } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import { saveMoodEntry } from "../utils/moodHistory";
 import { saveEntryForDate } from "../utils/selfCareHistory";
+import { AuthProvider } from "../context/AuthContext.jsx";
 
 const renderDashboard = () =>
   render(
     <MemoryRouter>
-      <Dashboard />
+      <AuthProvider>
+        <Dashboard />
+      </AuthProvider>
     </MemoryRouter>
   );
 
