@@ -3,19 +3,24 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   getFocusForEntry,
-  getLastMoodEntry,
+  getLastMoodEntryFrom,
+  getMoodHistory,
   getMoodTrend,
-  getRecentEntries,
+  getRecentEntriesFrom,
   getShortLabelForEntry,
-  getWellnessInsight
+  getWellnessInsightFrom
 } from "../utils/moodHistory";
 import {
-  getEntryForDate,
-  getMonthlyCompletedCount,
-  getStreak
+  getEntryForDateFrom,
+  getHistory,
+  getMonthlyCompletedCountFrom,
+  getStreakFrom
 } from "../utils/selfCareHistory";
 import { DEFAULT_TASKS } from "../utils/selfCareTasks";
 import { getRecommendedActions, TYPE_LABELS } from "../utils/recommendations";
+import { fetchMoodEntries } from "../api/moodEntries.js";
+import { fetchSelfCareDays } from "../api/selfCareDays.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon";
 
 const TREND_ARROW = { up: "↗", down: "↘", flat: "→", unknown: "—" };
@@ -31,18 +36,49 @@ const isToday = (isoDate) => {
 };
 
 function Dashboard() {
-  const lastEntry = getLastMoodEntry();
-  const todaysMoodEntry = lastEntry && isToday(lastEntry.date) ? lastEntry : null;
-  const recentEntries = getRecentEntries(7);
-  const trend = getMoodTrend(recentEntries);
-  const insight = getWellnessInsight();
+  const { user } = useAuth();
+  const [remoteMoodEntries, setRemoteMoodEntries] = useState(null);
+  const [remoteSelfCareHistory, setRemoteSelfCareHistory] = useState(null);
 
-  const todaysTasks = getEntryForDate(DEFAULT_TASKS);
+  // Signed-in users' data lives on the server, not localStorage. Fetch both
+  // sources once we know who's signed in; a signed-out user just reads
+  // localStorage synchronously, exactly as before. (remoteMoodEntries stays
+  // null until the fetch resolves, which doubles as the loading flag below —
+  // no separate "fetching" state needed.)
+  useEffect(() => {
+    if (!user) return;
+
+    let cancelled = false;
+
+    Promise.all([fetchMoodEntries(30), fetchSelfCareDays(90)]).then(
+      ([entries, history]) => {
+        if (cancelled) return;
+        setRemoteMoodEntries(entries);
+        setRemoteSelfCareHistory(history);
+      }
+    );
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  const moodEntries = user ? remoteMoodEntries ?? [] : getMoodHistory();
+  const selfCareHistoryData = user ? remoteSelfCareHistory ?? {} : getHistory();
+
+  const lastEntry = getLastMoodEntryFrom(moodEntries);
+  const todaysMoodEntry = lastEntry && isToday(lastEntry.date) ? lastEntry : null;
+  const recentEntries = getRecentEntriesFrom(moodEntries, 7);
+  const trend = getMoodTrend(recentEntries);
+  const insight = getWellnessInsightFrom(moodEntries);
+
+  const todaysTasks = getEntryForDateFrom(selfCareHistoryData, DEFAULT_TASKS);
   const todaysCompletedCount = Object.values(todaysTasks).filter(Boolean).length;
-  const streak = getStreak(todaysCompletedCount);
-  const monthlyCompleted = getMonthlyCompletedCount();
+  const streak = getStreakFrom(selfCareHistoryData, todaysCompletedCount);
+  const monthlyCompleted = getMonthlyCompletedCountFrom(selfCareHistoryData);
 
   const hasAnyData = Boolean(lastEntry) || todaysCompletedCount > 0 || streak > 0;
+  const stillLoadingRemote = Boolean(user) && remoteMoodEntries === null;
 
   const focus = getFocusForEntry(lastEntry);
   const recommendedActions = getRecommendedActions(lastEntry);
@@ -66,7 +102,9 @@ function Dashboard() {
           mood check-ins and self-care habits.
         </p>
 
-        {!hasAnyData ? (
+        {stillLoadingRemote ? (
+          <p className="dashboard-panel-empty">Loading your wellness data…</p>
+        ) : !hasAnyData ? (
           <div className="dashboard-empty-state">
             <p style={{ marginBottom: "16px" }}>
               You haven't checked in yet — take the Mood Quiz or try a
