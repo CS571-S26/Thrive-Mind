@@ -4,9 +4,12 @@ import './index.css'
 import App from './App.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { HashRouter } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext.jsx';
 
 createRoot(document.getElementById('root')).render(
    <HashRouter>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
    </HashRouter>
 )
