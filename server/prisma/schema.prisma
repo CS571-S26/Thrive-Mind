@@ -14,5 +14,44 @@ model User {
   displayName  String
   createdAt    DateTime @default(now())
 
+  moodEntries  MoodEntry[]
+  selfCareDays SelfCareDay[]
+
   @@map("users")
+}
+
+// Mirrors the shape of an entry in the client's old localStorage mood
+// history array (resultId is the tier string — "struggling"/"down"/
+// "okay"/"good" — not a unique id, matching the pre-backend data model).
+model MoodEntry {
+  entryId        String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resultId       String
+  label          String
+  emoji          String
+  entryDate      DateTime @default(now())
+  pct            Int
+  suggestion     String?
+  link           String?
+  categoryScores Json?
+  focusCategory  String?
+  createdAt      DateTime @default(now())
+
+  @@index([userId, entryDate])
+  @@map("mood_entries")
+}
+
+// One row per user per calendar day, mirroring the old localStorage
+// self-care history object (date-keyed, checkedItems keyed by task id).
+model SelfCareDay {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dayKey       String
+  checkedItems Json
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, dayKey])
+  @@map("self_care_days")
 }
