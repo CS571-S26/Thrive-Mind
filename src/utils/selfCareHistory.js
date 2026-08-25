@@ -43,8 +43,10 @@ const migrateLegacyEntry = (history) => {
 
 export const getHistory = () => migrateLegacyEntry(readHistory());
 
-export const getEntryForDate = (defaultTasks, date = new Date()) => {
-  const history = getHistory();
+// Pure variant that takes a history object directly, so callers with a
+// non-localStorage source (e.g. self-care days fetched from the API for a
+// signed-in user) can reuse the same derivation logic.
+export const getEntryForDateFrom = (history, defaultTasks, date = new Date()) => {
   const key = getDateKey(date);
 
   if (history[key]) return history[key];
@@ -55,6 +57,9 @@ export const getEntryForDate = (defaultTasks, date = new Date()) => {
   }, {});
 };
 
+export const getEntryForDate = (defaultTasks, date = new Date()) =>
+  getEntryForDateFrom(getHistory(), defaultTasks, date);
+
 export const saveEntryForDate = (checkedItems, date = new Date()) => {
   const history = getHistory();
   const key = getDateKey(date);
@@ -63,8 +68,7 @@ export const saveEntryForDate = (checkedItems, date = new Date()) => {
 
 // todayCount lets the caller pass the in-memory completed count for today
 // so the streak reflects the latest toggle without a storage round-trip.
-export const getStreak = (todayCount = null) => {
-  const history = getHistory();
+export const getStreakFrom = (history, todayCount = null) => {
   let streak = 0;
   const cursor = new Date();
 
@@ -96,8 +100,10 @@ export const getStreak = (todayCount = null) => {
   return streak;
 };
 
-export const getMonthlyCompletedCount = () => {
-  const history = getHistory();
+export const getStreak = (todayCount = null) =>
+  getStreakFrom(getHistory(), todayCount);
+
+export const getMonthlyCompletedCountFrom = (history) => {
   const now = new Date();
   const prefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 
@@ -105,3 +111,6 @@ export const getMonthlyCompletedCount = () => {
     .filter(([key]) => key.startsWith(prefix))
     .reduce((sum, [, entry]) => sum + Object.values(entry).filter(Boolean).length, 0);
 };
+
+export const getMonthlyCompletedCount = () =>
+  getMonthlyCompletedCountFrom(getHistory());

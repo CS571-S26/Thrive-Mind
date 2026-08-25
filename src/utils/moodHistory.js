@@ -56,15 +56,19 @@ export const saveMoodEntry = (result, pct, categoryScores = null, focusCategory 
   return entry;
 };
 
-export const getLastMoodEntry = () => {
-  const history = getMoodHistory();
-  return history[0] || null;
-};
+// Pure variants that take a history array directly, so callers with a
+// non-localStorage source (e.g. mood entries fetched from the API for a
+// signed-in user) can reuse the same derivation logic.
+export const getLastMoodEntryFrom = (history) => history[0] || null;
 
 // Oldest-first, capped to the most recent `count` check-ins.
-export const getRecentEntries = (count = 7) => {
-  return getMoodHistory().slice(0, count).reverse();
-};
+export const getRecentEntriesFrom = (history, count = 7) =>
+  history.slice(0, count).reverse();
+
+export const getLastMoodEntry = () => getLastMoodEntryFrom(getMoodHistory());
+
+export const getRecentEntries = (count = 7) =>
+  getRecentEntriesFrom(getMoodHistory(), count);
 
 export const getMoodTrend = (entries) => {
   if (entries.length < 2) {
@@ -92,8 +96,8 @@ export const getFocusForEntry = (entry) => {
 };
 
 // A simple, explainable, rule-based nudge — not a diagnosis, just a pattern flag.
-export const getWellnessInsight = () => {
-  const recent = getMoodHistory().slice(0, 5);
+export const getWellnessInsightFrom = (history) => {
+  const recent = history.slice(0, 5);
   const lowCount = recent.filter((entry) => LOW_MOOD_IDS.includes(entry.id)).length;
 
   if (recent.length >= 2 && lowCount >= 2) {
@@ -102,3 +106,5 @@ export const getWellnessInsight = () => {
 
   return null;
 };
+
+export const getWellnessInsight = () => getWellnessInsightFrom(getMoodHistory());
