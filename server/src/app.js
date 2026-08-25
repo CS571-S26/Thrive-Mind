@@ -5,6 +5,7 @@ import connectPgSimple from "connect-pg-simple";
 import rateLimit from "express-rate-limit";
 import pg from "pg";
 import authRouter from "./routes/auth.js";
+import moodEntriesRouter from "./routes/moodEntries.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 // Built once per process, not per-request, so it works both for the real
@@ -59,6 +60,7 @@ export function createApp() {
     legacyHeaders: false
   });
   app.use("/api/auth", authRateLimit, authRouter);
+  app.use("/api/mood-entries", moodEntriesRouter);
 
   app.use((req, res) => {
     res.status(404).json({ error: "Not found." });
