@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import pg from "pg";
 import authRouter from "./routes/auth.js";
 import moodEntriesRouter from "./routes/moodEntries.js";
+import selfCareDaysRouter from "./routes/selfCareDays.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 // Built once per process, not per-request, so it works both for the real
@@ -61,6 +62,7 @@ export function createApp() {
   });
   app.use("/api/auth", authRateLimit, authRouter);
   app.use("/api/mood-entries", moodEntriesRouter);
+  app.use("/api/self-care-days", selfCareDaysRouter);
 
   app.use((req, res) => {
     res.status(404).json({ error: "Not found." });
