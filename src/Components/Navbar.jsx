@@ -1,9 +1,17 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon";
 
 function CustomNavbar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, loading, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <Navbar
@@ -61,6 +69,67 @@ function CustomNavbar() {
                 {label}
               </Nav.Link>
             ))}
+
+            {!loading && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  marginLeft: "6px",
+                  paddingLeft: "10px",
+                  borderLeft: "1px solid rgba(255,255,255,0.3)"
+                }}
+              >
+                {user ? (
+                  <>
+                    <span style={{ color: "#ffffff", fontSize: "0.9rem" }}>
+                      Hi, {user.displayName}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      style={{
+                        background: "rgba(255,255,255,0.15)",
+                        border: "none",
+                        borderRadius: "8px",
+                        padding: "6px 12px",
+                        color: "#ffffff",
+                        fontWeight: "600",
+                        fontSize: "0.85rem",
+                        cursor: "pointer"
+                      }}
+                    >
+                      Log Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Nav.Link
+                      as={Link}
+                      to="/login"
+                      style={{ color: "#ffffff", padding: "6px 10px" }}
+                    >
+                      Log In
+                    </Nav.Link>
+                    <Link
+                      to="/signup"
+                      style={{
+                        background: "rgba(255,255,255,0.15)",
+                        borderRadius: "8px",
+                        padding: "6px 12px",
+                        color: "#ffffff",
+                        fontWeight: "600",
+                        fontSize: "0.85rem",
+                        textDecoration: "none"
+                      }}
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
