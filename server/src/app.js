@@ -14,6 +14,13 @@ import { errorHandler } from "./middleware/errorHandler.js";
 export function createApp() {
   const app = express();
 
+  // Render (and most PaaS hosts) sit behind a reverse proxy that terminates
+  // TLS — without this, Express sees plain HTTP and never sets the
+  // `secure` session cookie, silently breaking login in production.
+  app.set("trust proxy", 1);
+
+  const isProduction = process.env.NODE_ENV === "production";
+
   const allowedOrigins = (process.env.CLIENT_ORIGIN || "")
     .split(",")
     .map((origin) => origin.trim())
@@ -28,6 +35,11 @@ export function createApp() {
   app.use(express.json({ limit: "100kb" }));
 
   const isTestEnv = process.env.NODE_ENV === "test";
+  // The frontend (GitHub Pages) and API (Render) live on different origins
+  // in production, so the session cookie must be sent cross-site —
+  // SameSite=None requires Secure. Locally, both run on http://localhost
+  // so Lax is fine (and Secure would silently drop the cookie over http).
+  const cookieSameSite = isProduction ? "none" : "lax";
   const sessionStore = isTestEnv
     ? undefined // default in-memory store is fine for tests
     : new (connectPgSimple(session))({
@@ -43,8 +55,8 @@ export function createApp() {
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        secure: isProduction,
+        sameSite: cookieSameSite,
         maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
       }
     })
