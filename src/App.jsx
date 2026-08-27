@@ -4,7 +4,7 @@ import Home from "./Home";
 import MoodChecker from "./Components/MoodChecker";
 import Issues from "./Components/Issues";
 import Resources from "./Components/Resources";
-import SelfCarePlanner from "./Components/SelfCarePlanner"; // new self-care planner page
+import SelfCarePlanner from "./Components/SelfCarePlanner";
 import AboutUs from "./Components/AboutUs";
 import Privacy from "./Components/Privacy";
 import Login from "./Components/Login";
@@ -23,7 +23,7 @@ function App() {
         <Route path="/mood" element={<MoodChecker />} />
         <Route path="/issues" element={<Issues />} />
         <Route path="/resources" element={<Resources />} />
-        <Route path="/planner" element={<SelfCarePlanner />} /> {/* new self-care planner route */}
+        <Route path="/planner" element={<SelfCarePlanner />} />
         <Route path="/wellness" element={<Dashboard />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/privacy" element={<Privacy />} />
