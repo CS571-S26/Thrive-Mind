@@ -18,12 +18,35 @@ import {
 } from "../utils/selfCareHistory";
 import { DEFAULT_TASKS } from "../utils/selfCareTasks";
 import { getRecommendedActions, TYPE_LABELS } from "../utils/recommendations";
+import {
+  CATEGORY_NAMES,
+  getDailyCategorySeries,
+  getDailyMoodSeries,
+  getHabitMoodAssociation
+} from "../utils/analytics";
 import { fetchMoodEntries } from "../api/moodEntries.js";
 import { fetchSelfCareDays } from "../api/selfCareDays.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon";
+import TrendChart from "./TrendChart.jsx";
 
 const TREND_ARROW = { up: "↗", down: "↘", flat: "→", unknown: "—" };
+
+const CATEGORY_COLORS = {
+  Mood: "#4338ca",
+  Energy: "#8a5a00",
+  Sleep: "#2c6fb3",
+  Connection: "#b24373",
+  Stress: "#4c9a8e"
+};
+
+const RANGE_OPTIONS = [7, 14, 30];
+
+const formatChartDate = (dateKey) =>
+  new Date(`${dateKey}T00:00:00`).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric"
+  });
 
 const isToday = (isoDate) => {
   const d = new Date(isoDate);
@@ -86,6 +109,14 @@ function Dashboard() {
   // reasons (e.g. "Sleep has been your lowest category in 3 of your last 5
   // check-ins").
   const recommendedActions = getRecommendedActions(lastEntry, moodEntries.slice(1));
+
+  const [trendRangeDays, setTrendRangeDays] = useState(14);
+  const moodSeries = getDailyMoodSeries(moodEntries, trendRangeDays);
+  const categorySeries = getDailyCategorySeries(moodEntries, trendRangeDays);
+  const habitMoodAssociation = getHabitMoodAssociation(
+    moodEntries,
+    selfCareHistoryData
+  );
 
   const [barsVisible, setBarsVisible] = useState(false);
 
@@ -274,6 +305,117 @@ function Dashboard() {
                 </div>
               </Col>
             </Row>
+
+            {moodSeries.length >= 2 && (
+              <Row className="g-4 mt-1">
+                <Col lg={12}>
+                  <div className="dashboard-panel">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        gap: "10px",
+                        marginBottom: "14px"
+                      }}
+                    >
+                      <h2 style={{ fontSize: "1.15rem", margin: 0 }}>
+                        Mood trend
+                      </h2>
+
+                      <div
+                        role="group"
+                        aria-label="Trend chart date range"
+                        style={{ display: "flex", gap: "6px" }}
+                      >
+                        {RANGE_OPTIONS.map((days) => (
+                          <button
+                            key={days}
+                            type="button"
+                            onClick={() => setTrendRangeDays(days)}
+                            aria-pressed={trendRangeDays === days}
+                            style={{
+                              border: "1.5px solid #d7d4e8",
+                              borderRadius: "999px",
+                              padding: "4px 12px",
+                              fontSize: "0.8rem",
+                              fontWeight: 600,
+                              cursor: "pointer",
+                              background:
+                                trendRangeDays === days
+                                  ? "var(--color-primary)"
+                                  : "#fff",
+                              color: trendRangeDays === days ? "#fff" : "#4B5563"
+                            }}
+                          >
+                            {days}d
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <TrendChart
+                      series={[
+                        {
+                          label: "Overall",
+                          color: "var(--accessible-purple, #4338ca)",
+                          points: moodSeries.map((p) => ({
+                            date: p.date,
+                            value: p.pct
+                          }))
+                        }
+                      ]}
+                      days={trendRangeDays}
+                      formatDate={formatChartDate}
+                    />
+                  </div>
+                </Col>
+
+                {categorySeries.length >= 2 && (
+                  <Col lg={12}>
+                    <div className="dashboard-panel">
+                      <h2 style={{ fontSize: "1.15rem", marginBottom: "14px" }}>
+                        Category trends
+                      </h2>
+
+                      <TrendChart
+                        series={CATEGORY_NAMES.map((name) => ({
+                          label: name,
+                          color: CATEGORY_COLORS[name],
+                          points: categorySeries
+                            .filter((row) => row[name] !== undefined)
+                            .map((row) => ({ date: row.date, value: row[name] }))
+                        })).filter((s) => s.points.length >= 2)}
+                        days={trendRangeDays}
+                        formatDate={formatChartDate}
+                      />
+                    </div>
+                  </Col>
+                )}
+
+                {habitMoodAssociation && (
+                  <Col lg={12}>
+                    <div className="dashboard-insight">
+                      <div className="dashboard-insight-text">
+                        📊 On days you completed {DEFAULT_TASKS.length >= 4 ? "4+" : "more"}{" "}
+                        self-care activities, your average check-in score was{" "}
+                        <strong>
+                          {Math.abs(habitMoodAssociation.diffPct)}%{" "}
+                          {habitMoodAssociation.diffPct >= 0 ? "higher" : "lower"}
+                        </strong>{" "}
+                        ({habitMoodAssociation.highCareAvg}% vs.{" "}
+                        {habitMoodAssociation.otherAvg}%, based on{" "}
+                        {habitMoodAssociation.highCareDays +
+                          habitMoodAssociation.otherDays}{" "}
+                        check-ins). This is an association seen in your own
+                        data, not a guarantee — small samples can be noisy.
+                      </div>
+                    </div>
+                  </Col>
+                )}
+              </Row>
+            )}
           </>
         )}
       </div>
