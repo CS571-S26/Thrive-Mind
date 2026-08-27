@@ -81,7 +81,11 @@ function Dashboard() {
   const stillLoadingRemote = Boolean(user) && remoteMoodEntries === null;
 
   const focus = getFocusForEntry(lastEntry);
-  const recommendedActions = getRecommendedActions(lastEntry);
+  // moodEntries is newest-first, so excluding index 0 (== lastEntry) leaves
+  // the prior check-ins getRecommendedActions uses for frequency-aware
+  // reasons (e.g. "Sleep has been your lowest category in 3 of your last 5
+  // check-ins").
+  const recommendedActions = getRecommendedActions(lastEntry, moodEntries.slice(1));
 
   const [barsVisible, setBarsVisible] = useState(false);
 

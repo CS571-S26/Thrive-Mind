@@ -3,6 +3,7 @@ import { Container, Button, ProgressBar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   getLastMoodEntry,
+  getMoodHistory,
   getShortLabelForEntry,
   saveMoodEntry
 } from "../utils/moodHistory";
@@ -107,6 +108,12 @@ function MoodChecker() {
   });
   const [done, setDone] = useState(false);
   const [lastEntry, setLastEntry] = useState(getLastMoodEntry);
+  // Prior check-ins (not including whatever the user is about to submit),
+  // used to make the results screen's recommendation reasons context-aware
+  // instead of only ever looking at today's single check-in.
+  const [priorEntries, setPriorEntries] = useState(() =>
+    user ? [] : getMoodHistory()
+  );
   const [categoryScores, setCategoryScores] = useState([]);
   const [focusCategory, setFocusCategory] = useState(null);
   const [barsVisible, setBarsVisible] = useState(false);
@@ -118,13 +125,17 @@ function MoodChecker() {
   }, [done]);
 
   // Signed-in users' history lives on the server, not localStorage — refresh
-  // the "last check-in" banner from there once we know who's signed in.
+  // the "last check-in" banner (and the recent-history window used for
+  // context-aware recommendation reasons) from there once we know who's
+  // signed in.
   useEffect(() => {
     if (!user) return;
     let cancelled = false;
 
-    fetchMoodEntries(1).then((entries) => {
-      if (!cancelled && entries[0]) setLastEntry(entries[0]);
+    fetchMoodEntries(5).then((entries) => {
+      if (cancelled) return;
+      if (entries[0]) setLastEntry(entries[0]);
+      setPriorEntries(entries);
     });
 
     return () => {
@@ -179,10 +190,17 @@ function MoodChecker() {
           categoryScores: scores,
           focusCategory: focus
         })
-          .then(setLastEntry)
+          .then((entry) => {
+            setLastEntry(entry);
+            // So an immediate retake's recommendation reason accounts for
+            // this check-in too, not just the ones fetched on mount.
+            setPriorEntries((prev) => [entry, ...prev]);
+          })
           .catch(() => {});
       } else {
-        setLastEntry(saveMoodEntry(finalResult, finalPct, scores, focus));
+        const saved = saveMoodEntry(finalResult, finalPct, scores, focus);
+        setLastEntry(saved);
+        setPriorEntries((prev) => [saved, ...prev]);
       }
 
       setTimeout(() => setDone(true), 300);
@@ -384,11 +402,14 @@ function MoodChecker() {
               </h3>
 
               <div className="mood-actions-grid">
-                {getRecommendedActions({
-                  id: result.id,
-                  categoryScores,
-                  focusCategory
-                }).map((action) => (
+                {getRecommendedActions(
+                  {
+                    id: result.id,
+                    categoryScores,
+                    focusCategory
+                  },
+                  priorEntries
+                ).map((action) => (
                   <Link
                     to={action.link}
                     className="mood-action-card"
