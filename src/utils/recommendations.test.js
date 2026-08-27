@@ -135,4 +135,60 @@ describe("getRecommendedActions", () => {
   it("returns an empty array for a legacy entry with nothing to recommend", () => {
     expect(getRecommendedActions({ id: "okay" })).toEqual([]);
   });
+
+  describe("context-aware focus reason", () => {
+    const sleepFocusEntry = buildEntry({
+      focusCategory: "Sleep",
+      categoryScores: [
+        { category: "Mood", pct: 75 },
+        { category: "Energy", pct: 75 },
+        { category: "Sleep", pct: 25 },
+        { category: "Connection", pct: 75 },
+        { category: "Stress", pct: 75 }
+      ]
+    });
+
+    it("uses the single-check-in reason with no history", () => {
+      const [first] = getRecommendedActions(sleepFocusEntry);
+      expect(first.reason).toBe("Sleep was your lowest-scoring area today.");
+    });
+
+    it("uses the single-check-in reason when the pattern isn't repeated", () => {
+      const recentHistory = [
+        { focusCategory: "Stress" },
+        { focusCategory: "Energy" }
+      ];
+      const [first] = getRecommendedActions(sleepFocusEntry, recentHistory);
+      expect(first.reason).toBe("Sleep was your lowest-scoring area today.");
+    });
+
+    it("names the frequency once the same category recurs", () => {
+      const recentHistory = [
+        { focusCategory: "Sleep" },
+        { focusCategory: "Stress" },
+        { focusCategory: "Sleep" },
+        { focusCategory: "Energy" }
+      ];
+      const [first] = getRecommendedActions(sleepFocusEntry, recentHistory);
+      expect(first.reason).toBe(
+        "Sleep has been your lowest category in 3 of your last 5 check-ins."
+      );
+    });
+
+    it("only looks at the most recent 4 prior check-ins", () => {
+      // Zero Sleep matches within the most recent 4 — the 2 older Sleep
+      // entries (indices 4 and 5) are outside that window and shouldn't
+      // count toward the total.
+      const recentHistory = [
+        { focusCategory: "Stress" },
+        { focusCategory: "Energy" },
+        { focusCategory: "Mood" },
+        { focusCategory: "Connection" },
+        { focusCategory: "Sleep" },
+        { focusCategory: "Sleep" }
+      ];
+      const [first] = getRecommendedActions(sleepFocusEntry, recentHistory);
+      expect(first.reason).toBe("Sleep was your lowest-scoring area today.");
+    });
+  });
 });

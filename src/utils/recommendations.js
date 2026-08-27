@@ -113,8 +113,37 @@ const RESULT_TIER_REASON = {
   good: "You're doing well today."
 };
 
+// Counts how often `focusCategory` was also the focus in the most recent
+// prior check-ins (a window of up to 4, plus the current one = "last 5").
+// recentHistory is expected newest-first and should NOT include the
+// current check-in itself.
+const countRecentFocusMatches = (focusCategory, recentHistory) => {
+  const window = recentHistory.slice(0, 4);
+  const matches = window.filter((e) => e.focusCategory === focusCategory).length + 1;
+  const total = window.length + 1;
+  return { matches, total };
+};
+
+// Falls back to the single-check-in reason when there's no usable history
+// (e.g. a first-ever check-in, or a caller that doesn't pass any), and
+// upgrades to a frequency-based reason once a real pattern shows up.
+const buildFocusReason = (focusCategory, recentHistory) => {
+  if (!focusCategory) return "A small self-care win can help across the board.";
+
+  const { matches, total } = countRecentFocusMatches(focusCategory, recentHistory);
+  if (total > 1 && matches >= 2) {
+    return `${focusCategory} has been your lowest category in ${matches} of your last ${total} check-ins.`;
+  }
+
+  return `${focusCategory} was your lowest-scoring area today.`;
+};
+
 // entry: { id: resultId, categoryScores, focusCategory, suggestion, link }
-export const getRecommendedActions = (entry) => {
+// recentHistory: optional, newest-first array of prior check-ins (each with
+// at least focusCategory) — NOT including `entry` itself. Passing it makes
+// the focus-category reason frequency-aware instead of single-check-in-only;
+// omitting it (the default) keeps the original, simpler reason text.
+export const getRecommendedActions = (entry, recentHistory = []) => {
   if (!entry) return [];
 
   // Legacy entries saved before category scoring existed only have a single
@@ -146,9 +175,7 @@ export const getRecommendedActions = (entry) => {
   // 1. Address the single lowest-scoring category first.
   add(
     FOCUS_ACTION_BY_CATEGORY[focusCategory] || "planner",
-    focusCategory
-      ? `${focusCategory} was your lowest-scoring area today.`
-      : "A small self-care win can help across the board."
+    buildFocusReason(focusCategory, recentHistory)
   );
 
   // 2. Social connection matters broadly; only skip it if it's already
