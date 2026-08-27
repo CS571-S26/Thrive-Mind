@@ -2,45 +2,55 @@ import { useEffect, useState } from "react";
 import { Container, Row, Col, Tabs, Tab } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import Icon from "./Icon";
+import { isStale, formatVerifiedDate } from "../utils/resourceStatus";
 
-// Verified directly against uhs.wisc.edu (Aug 2026). If UHS restructures
-// their site, re-check these before trusting the links/numbers again.
+// lastVerified dates below reflect when each link was last actually opened
+// and confirmed working (not just when this file was written) — see
+// resourceStatus.js for how staleness is computed and flagged in the UI.
+const VERIFIED = "2026-08-27";
+
 const uwSupportRows = [
   {
     need: "Crisis (24/7)",
     resource: "UHS Crisis Support Line",
     desc: "Call 608-265-5600, option 9 — staffed 24/7 by licensed professionals.",
-    link: "https://www.uhs.wisc.edu/mental-health/"
+    link: "https://www.uhs.wisc.edu/mental-health/",
+    lastVerified: VERIFIED
   },
   {
     need: "Counseling",
     resource: "Individual Counseling",
     desc: "Free, confidential one-on-one sessions with a UHS counselor.",
-    link: "https://www.uhs.wisc.edu/mental-health/individual/"
+    link: "https://www.uhs.wisc.edu/mental-health/individual/",
+    lastVerified: VERIFIED
   },
   {
     need: "Drop-in support",
     resource: "Let's Talk",
     desc: "No appointment needed — informal, confidential drop-in consultations around campus.",
-    link: "https://www.uhs.wisc.edu/mental-health/lets-talk/"
+    link: "https://www.uhs.wisc.edu/mental-health/lets-talk/",
+    lastVerified: VERIFIED
   },
   {
     need: "Peer support",
     resource: "Group Counseling",
     desc: "Small groups (6–8 students) to connect with others facing similar experiences.",
-    link: "https://uhs.wisc.edu/mental-health/group-counseling/"
+    link: "https://uhs.wisc.edu/mental-health/group-counseling/",
+    lastVerified: VERIFIED
   },
   {
     need: "Self-guided tools",
     resource: "Thrive Online",
     desc: "Self-paced modules on test anxiety, stress management, and procrastination.",
-    link: "https://www.uhs.wisc.edu/mental-health/thrive-online/"
+    link: "https://www.uhs.wisc.edu/mental-health/thrive-online/",
+    lastVerified: VERIFIED
   },
   {
     need: "Graduate students",
     resource: "Graduate School Student Wellbeing",
     desc: "Wellbeing support and resource referral specifically for graduate students.",
-    link: "https://grad.wisc.edu/current-students/wellbeing/"
+    link: "https://grad.wisc.edu/current-students/wellbeing/",
+    lastVerified: VERIFIED
   }
 ];
 
@@ -54,25 +64,29 @@ const sections = [
         name: "988 Suicide & Crisis Lifeline",
         desc: "Call or text 988 — 24/7 free and confidential support.",
         link: "https://988lifeline.org",
-        label: "Visit 988lifeline.org"
+        label: "Visit 988lifeline.org",
+        lastVerified: VERIFIED
       },
       {
         name: "Crisis Text Line",
         desc: "Text HOME to 741741 to reach a trained crisis counselor.",
         link: "https://www.crisistextline.org",
-        label: "crisistextline.org"
+        label: "crisistextline.org",
+        lastVerified: VERIFIED
       },
       {
         name: "NAMI Helpline",
         desc: "1-800-950-6264 — National Alliance on Mental Illness support line.",
         link: "https://www.nami.org/help",
-        label: "nami.org/help"
+        label: "nami.org/help",
+        lastVerified: VERIFIED
       },
       {
         name: "SAMHSA Helpline",
         desc: "1-800-662-4357 — Free, confidential, 24/7 treatment referral service.",
         link: "https://www.samhsa.gov/find-help/national-helpline",
-        label: "samhsa.gov"
+        label: "samhsa.gov",
+        lastVerified: VERIFIED
       }
     ]
   },
@@ -85,25 +99,29 @@ const sections = [
         name: "Psychology Today",
         desc: "Search thousands of therapists by location, specialty, and insurance.",
         link: "https://www.psychologytoday.com/us/therapists",
-        label: "Find a therapist"
+        label: "Find a therapist",
+        lastVerified: VERIFIED
       },
       {
         name: "Open Path Collective",
         desc: "Affordable therapy sessions for those without insurance.",
         link: "https://openpathcollective.org",
-        label: "openpathcollective.org"
+        label: "openpathcollective.org",
+        lastVerified: VERIFIED
       },
       {
         name: "TherapyDen",
         desc: "Find therapists with a focus on inclusivity and social justice.",
         link: "https://www.therapyden.com",
-        label: "therapyden.com"
+        label: "therapyden.com",
+        lastVerified: VERIFIED
       },
       {
         name: "Zocdoc",
         desc: "Book appointments with psychiatrists and therapists who take insurance.",
-        link: "https://www.zocdoc.com/conditions/psychiatry",
-        label: "Book on Zocdoc"
+        link: "https://www.zocdoc.com",
+        label: "zocdoc.com",
+        lastVerified: VERIFIED
       }
     ]
   },
@@ -116,25 +134,29 @@ const sections = [
         name: "Talkiatry",
         desc: "In-network psychiatrists for medication management via telehealth.",
         link: "https://www.talkiatry.com",
-        label: "talkiatry.com"
+        label: "talkiatry.com",
+        lastVerified: VERIFIED
       },
       {
         name: "Cerebral",
         desc: "Online psychiatry and therapy with same-week appointments.",
         link: "https://cerebral.com",
-        label: "cerebral.com"
+        label: "cerebral.com",
+        lastVerified: VERIFIED
       },
       {
         name: "NAMI Provider Finder",
         desc: "Locate psychiatrists in your area through NAMI's directory.",
         link: "https://www.nami.org/Support-Education/NAMI-HelpLine",
-        label: "nami.org"
+        label: "nami.org",
+        lastVerified: VERIFIED
       },
       {
         name: "Brightside Health",
         desc: "Psychiatry and therapy for depression and anxiety via telehealth.",
         link: "https://www.brightside.com",
-        label: "brightside.com"
+        label: "brightside.com",
+        lastVerified: VERIFIED
       }
     ]
   },
@@ -147,25 +169,29 @@ const sections = [
         name: "Headspace",
         desc: "Guided meditation and mindfulness for stress, sleep, and focus.",
         link: "https://www.headspace.com",
-        label: "headspace.com"
+        label: "headspace.com",
+        lastVerified: VERIFIED
       },
       {
         name: "Calm",
         desc: "Sleep stories, breathing exercises, and meditations.",
         link: "https://www.calm.com",
-        label: "calm.com"
+        label: "calm.com",
+        lastVerified: VERIFIED
       },
       {
         name: "Woebot",
         desc: "AI-powered chatbot using CBT techniques for daily mood support.",
         link: "https://woebothealth.com",
-        label: "woebothealth.com"
+        label: "woebothealth.com",
+        lastVerified: VERIFIED
       },
       {
         name: "Wysa",
         desc: "Emotionally intelligent AI companion for mental wellness.",
         link: "https://www.wysa.com",
-        label: "wysa.com"
+        label: "wysa.com",
+        lastVerified: VERIFIED
       }
     ]
   },
@@ -178,19 +204,22 @@ const sections = [
         name: "BetterHelp",
         desc: "Online therapy with licensed counselors.",
         link: "https://www.betterhelp.com",
-        label: "betterhelp.com"
+        label: "betterhelp.com",
+        lastVerified: VERIFIED
       },
       {
         name: "Talkspace",
         desc: "Text, voice, and video therapy with licensed therapists.",
         link: "https://www.talkspace.com",
-        label: "talkspace.com"
+        label: "talkspace.com",
+        lastVerified: VERIFIED
       },
       {
         name: "7 Cups",
         desc: "Free online chat with trained listeners and paid therapy options.",
         link: "https://www.7cups.com",
-        label: "7cups.com"
+        label: "7cups.com",
+        lastVerified: VERIFIED
       }
     ]
   },
@@ -203,31 +232,49 @@ const sections = [
         name: "MentalHealth.gov",
         desc: "Government resource for mental health basics, finding care, and more.",
         link: "https://www.mentalhealth.gov",
-        label: "mentalhealth.gov"
+        label: "mentalhealth.gov",
+        lastVerified: VERIFIED
       },
       {
         name: "Mind",
         desc: "Comprehensive guides to mental health conditions and treatments.",
         link: "https://www.mind.org.uk",
-        label: "mind.org.uk"
+        label: "mind.org.uk",
+        lastVerified: VERIFIED
       },
       {
         name: "NAMI Learn More",
         desc: "Educational resources on specific conditions like depression and anxiety.",
         link: "https://www.nami.org/About-Mental-Illness",
-        label: "nami.org"
+        label: "nami.org",
+        lastVerified: VERIFIED
       },
       {
         name: "Verywell Mind",
         desc: "Evidence-based articles written by mental health professionals.",
         link: "https://www.verywellmind.com",
-        label: "verywellmind.com"
+        label: "verywellmind.com",
+        lastVerified: VERIFIED
       }
     ]
   }
 ];
 
 const generalSectionIds = sections.map((section) => section.id);
+
+function VerificationBadge({ lastVerified }) {
+  const stale = isStale(lastVerified);
+
+  return (
+    <span
+      className={stale ? "resources-verify-badge is-stale" : "resources-verify-badge"}
+    >
+      {stale
+        ? "⚠️ Please confirm this is still current"
+        : `✓ Verified ${formatVerifiedDate(lastVerified)}`}
+    </span>
+  );
+}
 
 function Resources() {
   const [searchParams] = useSearchParams();
@@ -266,6 +313,9 @@ function Resources() {
         <p className="resources-intro">
           You are not alone. Here are trusted resources to help you find the
           right support — from crisis lines to therapists, apps, and more.
+          Every link below is periodically re-checked; ones flagged ⚠️ are
+          overdue for a re-check and worth confirming still work before you
+          rely on them.
         </p>
 
         <Tabs
@@ -289,12 +339,17 @@ function Resources() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="uw-support-row"
-                    aria-label={`${row.need}: ${row.resource} — ${row.desc}`}
+                    aria-label={`${row.need}: ${row.resource} — ${row.desc} — ${
+                      isStale(row.lastVerified)
+                        ? "please confirm this is still current"
+                        : `verified ${formatVerifiedDate(row.lastVerified)}`
+                    }`}
                   >
                     <span className="uw-support-need">{row.need}</span>
                     <span className="uw-support-resource">
                       <strong>{row.resource}</strong>
                       <span className="uw-support-desc">{row.desc}</span>
+                      <VerificationBadge lastVerified={row.lastVerified} />
                     </span>
                   </a>
                 ))}
@@ -320,7 +375,11 @@ function Resources() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="resources-card-link"
-                        aria-label={`${item.name}: ${item.desc}`}
+                        aria-label={`${item.name}: ${item.desc} — ${
+                          isStale(item.lastVerified)
+                            ? "please confirm this is still current"
+                            : `verified ${formatVerifiedDate(item.lastVerified)}`
+                        }`}
                       >
                         <div className="resources-card">
                           <h3 className="resources-card-title">{item.name}</h3>
@@ -330,6 +389,8 @@ function Resources() {
                           <div className="resources-card-label">
                             🔗 {item.label}
                           </div>
+
+                          <VerificationBadge lastVerified={item.lastVerified} />
                         </div>
                       </a>
                     </Col>

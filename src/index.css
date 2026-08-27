@@ -825,6 +825,18 @@ a {
   font-weight: 600;
 }
 
+.resources-verify-badge {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.resources-verify-badge.is-stale {
+  color: #a6403d;
+}
+
 .resources-footer-note {
   text-align: center;
   margin-top: 8px;
