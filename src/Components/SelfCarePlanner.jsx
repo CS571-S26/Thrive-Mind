@@ -1,13 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  ProgressBar,
-  Row
-} from "react-bootstrap";
+import { Button, Card, Container, Row } from "react-bootstrap";
 import {
   getDateKey,
   getEntryForDate,
@@ -20,6 +12,8 @@ import { DEFAULT_TASKS } from "../utils/selfCareTasks";
 import { fetchSelfCareDays, putSelfCareDay } from "../api/selfCareDays.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon";
+import TaskCard from "./self-care-planner/TaskCard.jsx";
+import ProgressSummaryCard from "./self-care-planner/ProgressSummaryCard.jsx";
 
 function SelfCarePlanner() {
   const { user } = useAuth();
@@ -146,55 +140,12 @@ function SelfCarePlanner() {
               )}
             </div>
 
-            <Card className="planner-progress-card border-0 mb-4">
-              <Card.Body>
-                <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                  <div>
-                    <h2
-                      className="mb-1"
-                      style={{
-                        color: "#5B45D6",
-                        fontSize: "1.25rem"
-                      }}
-                    >
-                      Today’s Progress
-                    </h2>
-
-                    <p className="mb-0 planner-muted-text">
-                      {completedCount} of {DEFAULT_TASKS.length} tasks completed
-                    </p>
-                  </div>
-
-                  <span
-  style={{
-    backgroundColor: "var(--accessible-purple)",
-    color: "#ffffff",
-    borderRadius: "14px",
-    fontWeight: "700",
-    padding: "12px 22px",
-    display: "inline-block",
-    fontSize: "1rem",
-    minWidth: "140px",
-    textAlign: "center"
-  }}
->
-  {progressPercent}% done
-</span>
-                </div>
-
-                <ProgressBar className="planner-progress-bar">
-                  <ProgressBar
-                    now={progressPercent}
-                    label={`${progressPercent}%`}
-                    aria-label={`Self-care planner progress is ${progressPercent} percent`}
-                  />
-                </ProgressBar>
-
-                <p className="planner-encouragement mt-3 mb-0">
-                  {progressMessage}
-                </p>
-              </Card.Body>
-            </Card>
+            <ProgressSummaryCard
+              completedCount={completedCount}
+              totalCount={DEFAULT_TASKS.length}
+              progressPercent={progressPercent}
+              progressMessage={progressMessage}
+            />
 
             <h2 className="visually-hidden-custom">
               Self-Care Checklist Tasks
@@ -202,41 +153,12 @@ function SelfCarePlanner() {
 
             <Row className="g-3">
               {DEFAULT_TASKS.map((task) => (
-                <Col xs={12} md={6} key={task.id}>
-                  <Card className="planner-task-card border-0 h-100">
-                    <Card.Body className="d-flex align-items-center justify-content-between gap-3">
-                      <div className="d-flex align-items-center gap-3">
-                        <div className="planner-emoji-circle" aria-hidden="true">
-                          <span>{task.emoji}</span>
-                        </div>
-
-                        <div>
-                          <h3
-                            className="mb-1"
-                            style={{
-                              fontSize: "1rem",
-                              color: "#3F3F46"
-                            }}
-                          >
-                            {task.label}
-                          </h3>
-
-                          <p className="mb-0 planner-muted-text">
-                            Yay! You did it!
-                          </p>
-                        </div>
-                      </div>
-
-                      <Form.Check
-                        type="checkbox"
-                        checked={checkedItems[task.id]}
-                        onChange={() => handleToggle(task.id)}
-                        aria-label={task.label}
-                        className="planner-checkbox"
-                      />
-                    </Card.Body>
-                  </Card>
-                </Col>
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  checked={checkedItems[task.id]}
+                  onToggle={() => handleToggle(task.id)}
+                />
               ))}
             </Row>
 
