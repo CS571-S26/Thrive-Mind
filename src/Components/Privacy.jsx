@@ -40,11 +40,18 @@ function Privacy() {
             What's stored, and where
           </h2>
           <p style={{ marginBottom: 0 }}>
-            Your mood check-ins and self-care checklist history are stored
-            only in this browser's <code>localStorage</code>. Nothing you
-            enter — quiz answers, category scores, checklist items — is sent
-            to a server. There is no backend and no database: Thrive Mind is
-            a fully static site.
+            By default — without an account — your mood check-ins and
+            self-care checklist history are stored only in this browser's{" "}
+            <code>localStorage</code>. Nothing is sent to a server, and
+            there's no backend involved at all.
+          </p>
+          <p style={{ marginBottom: 0, marginTop: "10px" }}>
+            Creating an account is optional and only changes{" "}
+            <em>where</em> that same data lives: instead of your browser, it's
+            stored on our own server (not a third party), tied to your
+            account, so it can follow you across devices. Your password is
+            hashed, never stored in plain text, and every request for your
+            data is scoped to your account only.
           </p>
         </div>
 
@@ -53,10 +60,12 @@ function Privacy() {
             Analytics, cookies, and tracking
           </h2>
           <p style={{ marginBottom: 0 }}>
-            Thrive Mind does not use analytics, tracking scripts, or cookies
-            of any kind. GitHub Pages, which hosts this site, may log
-            standard server access data (like any web host); Thrive Mind
-            itself adds nothing on top of that.
+            Thrive Mind never uses analytics or tracking scripts, and sets no
+            cookies at all unless you sign in. Signing in sets exactly one
+            cookie — a functional session cookie that keeps you logged in —
+            never used for tracking or shared with anyone. GitHub Pages,
+            which hosts the site, may log standard server access data (like
+            any web host); Thrive Mind itself adds nothing on top of that.
           </p>
         </div>
 
@@ -66,7 +75,11 @@ function Privacy() {
           </h2>
           <p>
             Clearing your browser's site data for Thrive Mind removes
-            everything. You can also do it right here:
+            everything stored locally. You can also do it right here — this
+            clears your local data only; if you're signed in, it does not
+            delete your account or its data on the server (there's no
+            self-service account deletion yet — email us via the About Us
+            page and we'll delete it by hand):
           </p>
 
           <Button variant="outline-danger" onClick={handleClearData}>

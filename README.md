@@ -88,8 +88,8 @@ Being upfront about these boundaries is intentional: an explainable rule-based s
 
 ## Technical highlights
 
-- **Testing**: [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react) covering core logic (mood scoring, category breakdown, recommendation rule selection, trend/streak calculation) and component behavior, plus an automated accessibility check on every page using [axe-core](https://github.com/dequelabs/axe-core).
-- **Persistence**: `localStorage`/`sessionStorage` only, through a dedicated utility layer (see [Architecture](#architecture)) — no backend, no database, nothing leaves the browser.
+- **Testing**: [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react) covering core logic (mood scoring, category breakdown, recommendation rule selection, trend/streak calculation) and component behavior, plus an automated accessibility check on every page using [axe-core](https://github.com/dequelabs/axe-core). [Playwright](https://playwright.dev/) covers real browser flows — quiz completion, keyboard-only interaction, in-progress persistence, and deep links — on both desktop and mobile viewports.
+- **Persistence**: `localStorage`/`sessionStorage` by default — nothing leaves the browser unless you create an account. Signing in syncs mood check-ins and self-care history to a small Express + Prisma + Postgres API (see [server/](server/)) instead, scoped per-user behind real auth (sessions, bcrypt), so the same data follows you across devices.
 - **CI/CD**: every push to `main` runs lint → test → build via GitHub Actions (`.github/workflows/deploy.yml`), then deploys straight to GitHub Pages. A separate `ci.yml` runs the same checks on every branch and pull request.
 
 ## Accessibility
@@ -107,7 +107,7 @@ A page-by-page manual VoiceOver testing checklist is in [ACCESSIBILITY_TESTING.m
 
 ## Privacy & Safety
 
-Thrive Mind stores mood and self-care history only in your browser — nothing is sent to a server, and there's no analytics or tracking. Full details, plus a way to delete your local data, are on the in-app [Privacy & Safety](https://cs571-s26.github.io/Thrive-Mind/#/privacy) page.
+By default, Thrive Mind stores mood and self-care history only in your browser — nothing is sent to a server. Creating an account is optional and only changes where that same data is stored (a real, authenticated API — not a third party), so it can sync across your devices; there's still no analytics or tracking either way. Full details, plus a way to delete your data, are on the in-app [Privacy & Safety](https://cs571-s26.github.io/Thrive-Mind/#/privacy) page.
 
 ## Development
 
@@ -124,6 +124,13 @@ This starts a local dev server (Vite) with hot reload, printed in your terminal 
 
 ```bash
 npm test
+```
+
+**Browser tests** ([Playwright](https://playwright.dev/), desktop + mobile viewport — quiz completion, keyboard-only interaction, persistence, deep links):
+
+```bash
+npx playwright install chromium   # first time only
+npm run test:e2e
 ```
 
 **Build:**
