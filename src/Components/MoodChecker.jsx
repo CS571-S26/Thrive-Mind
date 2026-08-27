@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { Container, Button, ProgressBar } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import {
   getLastMoodEntry,
   getMoodHistory,
   getShortLabelForEntry,
   saveMoodEntry
 } from "../utils/moodHistory";
-import { getRecommendedActions, TYPE_LABELS } from "../utils/recommendations";
 import {
   getCategoryScores,
   getFocusCategory,
@@ -17,6 +15,9 @@ import {
 import { fetchMoodEntries, createMoodEntry } from "../api/moodEntries.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import Icon from "./Icon";
+import ProgressIndicator from "./mood-quiz/ProgressIndicator.jsx";
+import QuestionCard from "./mood-quiz/QuestionCard.jsx";
+import QuizResults from "./mood-quiz/QuizResults.jsx";
 
 const DISCLAIMER =
   "This check-in is not a diagnostic tool. It's designed to help you reflect on how you're feeling and connect you with the right kind of support.";
@@ -255,189 +256,27 @@ function MoodChecker() {
           </p>
         )}
 
-        <ProgressBar
-          style={{
-            height: "8px",
-            borderRadius: "8px",
-            marginBottom: "24px"
-          }}
-        >
-          <ProgressBar
-            now={progress}
-            variant={done ? "success" : "info"}
-            aria-label={`Mood quiz progress is ${Math.round(progress)} percent`}
-          />
-        </ProgressBar>
+        <ProgressIndicator progress={progress} done={done} />
 
         {!done ? (
-          <div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "6px"
-              }}
-            >
-              <p style={{ fontSize: "0.85rem", color: "#4B5563", margin: 0 }}>
-                Question {current + 1} of {questions.length}
-              </p>
-
-              {current > 0 && (
-                <button
-                  type="button"
-                  onClick={goBack}
-                  aria-label="Go back to the previous question"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    color: "var(--color-primary)",
-                    fontSize: "0.85rem",
-                    fontWeight: "600",
-                    cursor: "pointer",
-                    padding: "4px 6px"
-                  }}
-                >
-                  ← Back
-                </button>
-              )}
-            </div>
-
-            <h2
-              style={{
-                color: "#3F3F46",
-                marginBottom: "20px",
-                fontSize: "1.2rem"
-              }}
-            >
-              {questions[current].question}
-            </h2>
-
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px"
-              }}
-            >
-              {questions[current].options.map((opt, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => handleSelect(opt.score)}
-                  style={{
-                    background:
-                      answers[current] === opt.score
-                        ? "linear-gradient(135deg, var(--color-primary-light), var(--color-primary))"
-                        : "#f8f7ff",
-                    border: "1.5px solid #d7d4e8",
-                    borderRadius: "12px",
-                    padding: "12px 16px",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    fontSize: "0.95rem",
-                    color: answers[current] === opt.score ? "#ffffff" : "#2F2F35",
-                    transition: "all 0.15s ease",
-                    fontFamily: "inherit",
-                    fontWeight: answers[current] === opt.score ? "700" : "500"
-                  }}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <QuestionCard
+            question={questions[current]}
+            questionNumber={current + 1}
+            totalQuestions={questions.length}
+            selectedScore={answers[current]}
+            onSelect={handleSelect}
+            onBack={goBack}
+            showBack={current > 0}
+          />
         ) : (
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "12px" }} aria-hidden="true">
-              {result.emoji}
-            </div>
-
-            <h2 style={{ color: result.color, marginBottom: "10px" }}>
-              {result.label}
-            </h2>
-
-            <p
-              style={{
-                padding: "16px",
-                borderRadius: "12px",
-                background: `${result.color}11`,
-                color: "#3F3F46",
-                lineHeight: "1.6",
-                marginBottom: "20px"
-              }}
-            >
-              {result.message}
-            </p>
-
-            <div className="mood-breakdown">
-              <h3 className="mood-breakdown-title">Your check-in</h3>
-
-              {categoryScores.map((entry) => (
-                <div className="mood-category-row" key={entry.category}>
-                  <span className="mood-category-label">{entry.category}</span>
-
-                  <span className="mood-category-track">
-                    <span
-                      className="mood-category-fill"
-                      style={{ width: barsVisible ? `${entry.pct}%` : "0%" }}
-                    />
-                  </span>
-
-                  <span className="mood-category-pct">{entry.pct}%</span>
-                </div>
-              ))}
-
-              {focusCategory && (
-                <p className="mood-focus-callout">
-                  🎯 Your biggest area to focus on today:{" "}
-                  <strong>{focusCategory}</strong>
-                </p>
-              )}
-            </div>
-
-            <div className="mood-actions">
-              <h3 className="mood-actions-title">
-                Based on your check-in, here's what you could try now
-              </h3>
-
-              <div className="mood-actions-grid">
-                {getRecommendedActions(
-                  {
-                    id: result.id,
-                    categoryScores,
-                    focusCategory
-                  },
-                  priorEntries
-                ).map((action) => (
-                  <Link
-                    to={action.link}
-                    className="mood-action-card"
-                    key={action.id}
-                    aria-label={`${TYPE_LABELS[action.type]}: ${action.title} — ${action.desc}${
-                      action.reason ? ` Why: ${action.reason}` : ""
-                    }`}
-                  >
-                    <span className="mood-action-type">
-                      {TYPE_LABELS[action.type]}
-                    </span>
-                    <div className="mood-action-emoji" aria-hidden="true">
-                      {action.emoji}
-                    </div>
-                    <div className="mood-action-title">{action.title}</div>
-                    <p className="mood-action-desc">{action.desc}</p>
-                    {action.reason && (
-                      <p className="mood-action-reason">Why: {action.reason}</p>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <Button className="btn-custom" onClick={reset}>
-              Retake Quiz
-            </Button>
-          </div>
+          <QuizResults
+            result={result}
+            categoryScores={categoryScores}
+            focusCategory={focusCategory}
+            barsVisible={barsVisible}
+            priorEntries={priorEntries}
+            onRetake={reset}
+          />
         )}
       </div>
     </Container>
