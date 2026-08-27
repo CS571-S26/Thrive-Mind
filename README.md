@@ -8,12 +8,7 @@
 
 Thrive Mind is a client-side mental wellness platform built for college students. It combines a non-diagnostic mood check-in, an explainable rule-based recommendation engine, mood history and trend tracking, self-care habit tracking, and curated (and verified) campus support resources in a single accessible interface.
 
-## Why it's different
 
-Two things this project treats as first-class, not afterthoughts:
-
-- **Explainable, not black-box** — every recommendation traces back to a specific, published rule (see [below](#recommendation-engine)), not a model. You can always answer "why did it suggest this?"
-- **Accessibility-first** — contrast, heading structure, accessible names, keyboard navigation, and reduced motion were manually audited and are now covered by automated regression tests (see [Accessibility](#accessibility)).
 
 ## Features
 
